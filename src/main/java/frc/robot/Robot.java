@@ -36,6 +36,7 @@ public class Robot extends LoggedRobot {
 
   public Robot() {
     // Record metadata
+    /*
     Logger.recordMetadata("ProjectName", BuildConstants.MAVEN_NAME);
     Logger.recordMetadata("BuildDate", BuildConstants.BUILD_DATE);
     Logger.recordMetadata("GitSHA", BuildConstants.GIT_SHA);
@@ -52,6 +53,7 @@ public class Robot extends LoggedRobot {
         Logger.recordMetadata("GitDirty", "Unknown");
         break;
     }
+    */
 
     // Set up data receivers & replay source
     switch (Constants.currentMode) {
