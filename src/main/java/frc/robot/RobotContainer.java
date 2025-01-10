@@ -120,8 +120,8 @@ public class RobotContainer {
     drive.setDefaultCommand(
         DriveCommands.joystickDrive(
             drive,
-            () -> -controller.getRawAxis(ControlConstants.kLeftYAxis),
-            () -> -controller.getRawAxis(ControlConstants.kLeftXAxis),
+            () -> controller.getRawAxis(ControlConstants.kLeftYAxis),
+            () -> controller.getRawAxis(ControlConstants.kLeftXAxis),
             () -> -controller.getRawAxis(ControlConstants.kRightXAxis)));
 
     // Lock to 0° when A button is held
@@ -130,8 +130,8 @@ public class RobotContainer {
         .whileTrue(
             DriveCommands.joystickDriveAtAngle(
                 drive,
-                () -> -controller.getRawAxis(ControlConstants.kLeftYAxis),
-                () -> -controller.getRawAxis(ControlConstants.kLeftXAxis),
+                () -> controller.getRawAxis(ControlConstants.kLeftYAxis),
+                () -> controller.getRawAxis(ControlConstants.kLeftXAxis),
                 () -> new Rotation2d()));
 
     // Switch to X pattern when X button is pressed
