@@ -1,4 +1,4 @@
-// Copyright 2021-2024 FRC 6328
+// Copyright 2021-2025 FRC 6328
 // http://github.com/Mechanical-Advantage
 //
 // This program is free software; you can redistribute it and/or
@@ -33,5 +33,29 @@ public final class Constants {
 
     /** Replaying from a log file. */
     REPLAY
+  }
+
+  public static class ControlConstants {
+    public static final int kLeftXAxis = 0;
+    public static final int kLeftYAxis = 1;
+    public static final int kRightXAxis = 4;
+    public static final int kRightYAxis = 5;
+
+    public static final int kLeftTrigger = 2;
+    public static final int kRightTrigger = 3;
+
+    public static final int kAButton = 1;
+    public static final int kBButton = 2;
+    public static final int kXButton = 3;
+    public static final int kYButton = 4;
+    public static final int kLeftBumper = 5;
+    public static final int kRightBumper = 6;
+    public static final int kBackButton = 7;
+    public static final int kStartButton = 8;
+    public static final int kLeftStickButton = 9;
+    public static final int kRightStickButton = 10;
+
+    public static final int kControllerPort1 = 0;
+    public static final int kControllerPort2 = 1;
   }
 }
