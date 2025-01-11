@@ -39,7 +39,7 @@ public class ModuleIOSim implements ModuleIO {
     // Create drive and turn sim models
     driveSim =
         new DCMotorSim(
-            LinearSystemId.createDCMotorSystem(driveGearbox, 0.025, driveMotorReduction),
+            LinearSystemId.createDCMotorSystem(driveGearbox, 6.66e-6, driveMotorReduction),
             driveGearbox);
     turnSim =
         new DCMotorSim(
