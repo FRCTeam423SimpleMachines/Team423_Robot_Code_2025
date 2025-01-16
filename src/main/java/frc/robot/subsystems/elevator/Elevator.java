@@ -18,11 +18,11 @@ public class Elevator extends SubsystemBase {
     Logger.processInputs("Elavator", inputs);
   }
 
-  public Command runFisrtPercent(double Percent) {
-    return runEnd(() -> io.setFirstVoltage(Percent * 12.0), () -> io.setFirstVoltage(0));
+  public Command runFisrtPercent(double percent) {
+    return runEnd(() -> io.setFirstVoltage(percent * 12.0), () -> io.setFirstVoltage(0));
   }
 
-  public Command runSecondPercent(double Percent) {
-    return runEnd(() -> io.setSecondVoltage(Percent * 12.0), () -> io.setSecondVoltage(0));
+  public Command runSecondPercent(double percent) {
+    return runEnd(() -> io.setSecondVoltage(percent * 12.0), () -> io.setSecondVoltage(0));
   }
 }

@@ -18,14 +18,17 @@ public class ElevatorIOSim implements ElevatorIO {
             LinearSystemId.createDCMotorSystem(DCMotor.getNEO(1), 6.66e-6, 1), DCMotor.getNEO(1));
   }
 
+  @Override
   public void setFirstVoltage(double voltage) {
     m_firstStageMotor.setInputVoltage(voltage);
   }
 
+  @Override
   public void setSecondVoltage(double voltage) {
     m_secondStageMotor.setInputVoltage(voltage);
   }
 
+  @Override
   public void updateInputs(ElevatorIOInputs inputs) {
     m_firstStageMotor.update(0.02);
     m_secondStageMotor.update(0.02);

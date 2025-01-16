@@ -21,14 +21,17 @@ public class ElevatorIOSpark implements ElevatorIO {
     m_secondStageEncoder = m_secondStageMotor.getEncoder();
   }
 
+  @Override
   public void setFirstVoltage(double voltage) {
     m_firstStageMotor.setVoltage(voltage);
   }
 
+  @Override
   public void setSecondVoltage(double voltage) {
     m_secondStageMotor.setVoltage(voltage);
   }
 
+  @Override
   public void updateInputs(ElevatorIOInputs inputs) {
     ifOk(
         m_firstStageMotor,
