@@ -58,4 +58,8 @@ public final class Constants {
     public static final int kControllerPort1 = 0;
     public static final int kControllerPort2 = 1;
   }
+
+  public static class IntakeConstants {
+    public static final int intakeCANID = 23;
+  }
 }

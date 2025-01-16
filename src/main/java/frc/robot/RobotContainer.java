@@ -30,6 +30,10 @@ import frc.robot.subsystems.drive.GyroIONavX;
 import frc.robot.subsystems.drive.ModuleIO;
 import frc.robot.subsystems.drive.ModuleIOSim;
 import frc.robot.subsystems.drive.ModuleIOSpark;
+import frc.robot.subsystems.intake.Intake;
+import frc.robot.subsystems.intake.IntakeIO;
+import frc.robot.subsystems.intake.IntakeIOSim;
+import frc.robot.subsystems.intake.IntakeIOSpark;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
 /**
@@ -41,9 +45,11 @@ import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 public class RobotContainer {
   // Subsystems
   private final Drive drive;
+  private final Intake intake;
 
   // Controller
-  private final CommandJoystick controller = new CommandJoystick(0);
+  private final CommandJoystick controller1 = new CommandJoystick(0);
+  private final CommandJoystick controller2 = new CommandJoystick(1);
 
   // Dashboard inputs
   private final LoggedDashboardChooser<Command> autoChooser;
@@ -60,6 +66,7 @@ public class RobotContainer {
                 new ModuleIOSpark(1),
                 new ModuleIOSpark(2),
                 new ModuleIOSpark(3));
+        intake = new Intake(new IntakeIOSpark());
         break;
 
       case SIM:
@@ -71,6 +78,7 @@ public class RobotContainer {
                 new ModuleIOSim(),
                 new ModuleIOSim(),
                 new ModuleIOSim());
+        intake = new Intake(new IntakeIOSim());
         break;
 
       default:
@@ -82,6 +90,7 @@ public class RobotContainer {
                 new ModuleIO() {},
                 new ModuleIO() {},
                 new ModuleIO() {});
+        intake = new Intake(new IntakeIO() {});
         break;
     }
 
@@ -120,25 +129,25 @@ public class RobotContainer {
     drive.setDefaultCommand(
         DriveCommands.joystickDrive(
             drive,
-            () -> controller.getRawAxis(ControlConstants.kLeftYAxis),
-            () -> controller.getRawAxis(ControlConstants.kLeftXAxis),
-            () -> -controller.getRawAxis(ControlConstants.kRightXAxis)));
+            () -> controller1.getRawAxis(ControlConstants.kLeftYAxis),
+            () -> controller1.getRawAxis(ControlConstants.kLeftXAxis),
+            () -> -controller1.getRawAxis(ControlConstants.kRightXAxis)));
 
     // Lock to 0° when A button is held
-    controller
+    controller1
         .button(ControlConstants.kAButton)
         .whileTrue(
             DriveCommands.joystickDriveAtAngle(
                 drive,
-                () -> controller.getRawAxis(ControlConstants.kLeftYAxis),
-                () -> controller.getRawAxis(ControlConstants.kLeftXAxis),
+                () -> controller1.getRawAxis(ControlConstants.kLeftYAxis),
+                () -> controller1.getRawAxis(ControlConstants.kLeftXAxis),
                 () -> new Rotation2d()));
 
     // Switch to X pattern when X button is pressed
-    controller.button(ControlConstants.kXButton).onTrue(Commands.runOnce(drive::stopWithX, drive));
+    controller1.button(ControlConstants.kXButton).onTrue(Commands.runOnce(drive::stopWithX, drive));
 
     // Reset gyro to 0° when B button is pressed
-    controller
+    controller1
         .button(ControlConstants.kBButton)
         .onTrue(
             Commands.runOnce(
@@ -147,6 +156,10 @@ public class RobotContainer {
                             new Pose2d(drive.getPose().getTranslation(), new Rotation2d())),
                     drive)
                 .ignoringDisable(true));
+
+    // Runs intake directly at half speed for testing
+    intake.setDefaultCommand(
+        intake.runPercent(0.5 * controller2.getRawAxis(ControlConstants.kLeftYAxis)));
   }
 
   /**
