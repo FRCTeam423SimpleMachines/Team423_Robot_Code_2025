@@ -16,13 +16,18 @@ package frc.robot;
 import com.pathplanner.lib.auto.AutoBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants.ControlConstants;
+import frc.robot.commands.AutoScoring;
 import frc.robot.commands.DriveCommands;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.GyroIO;
@@ -30,6 +35,9 @@ import frc.robot.subsystems.drive.GyroIONavX;
 import frc.robot.subsystems.drive.ModuleIO;
 import frc.robot.subsystems.drive.ModuleIOSim;
 import frc.robot.subsystems.drive.ModuleIOSpark;
+
+import java.util.List;
+
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
 /**
@@ -47,6 +55,8 @@ public class RobotContainer {
 
   // Dashboard inputs
   private final LoggedDashboardChooser<Command> autoChooser;
+
+  private List<Boolean> ignoredFaces;
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -85,8 +95,19 @@ public class RobotContainer {
         break;
     }
 
+    GenericEntry faceToggle1 = Shuffleboard.getTab("Auto Face Toggles").add("Face AB",true).withWidget(BuiltInWidgets.kToggleSwitch).getEntry();
+    GenericEntry faceToggle2 = Shuffleboard.getTab("Auto Face Toggles").add("Face CD",true).withWidget(BuiltInWidgets.kToggleSwitch).getEntry();
+    GenericEntry faceToggle3 =  Shuffleboard.getTab("Auto Face Toggles").add("Face EF",true).withWidget(BuiltInWidgets.kToggleSwitch).getEntry();
+    GenericEntry faceToggle4 =  Shuffleboard.getTab("Auto Face Toggles").add("Face GH",true).withWidget(BuiltInWidgets.kToggleSwitch).getEntry();
+    GenericEntry faceToggle5 =  Shuffleboard.getTab("Auto Face Toggles").add("Face IJ",true).withWidget(BuiltInWidgets.kToggleSwitch).getEntry();
+    GenericEntry faceToggle6 =  Shuffleboard.getTab("Auto Face Toggles").add("Face KL",true).withWidget(BuiltInWidgets.kToggleSwitch).getEntry();
+
+    GenericEntry[] faceToggles = {faceToggle1,faceToggle2,faceToggle3,faceToggle4,faceToggle5,faceToggle6};
+
     // Set up auto routines
     autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
+
+    autoChooser.addOption("AutoScoring", new AutoScoring(faceToggles));
 
     // Set up SysId routines
     autoChooser.addOption(
