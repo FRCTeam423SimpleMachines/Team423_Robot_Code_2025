@@ -1,34 +1,32 @@
 package frc.robot.commands;
 
-import edu.wpi.first.networktables.GenericEntry;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.subsystems.drive.Drive;
+import frc.robot.util.Branch;
+import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
 public class AutoScoring extends Command {
 
-    boolean[] ignoredFaces = new boolean[6];
-    GenericEntry[] ignored;
+  private LoggedDashboardChooser<Branch> chooser1;
+  private Branch firstBranch;
+  private final Drive drive;
 
-    public AutoScoring(GenericEntry[] faceToggles) {
-        ignored = faceToggles;
-    }
+  public AutoScoring(Drive driveSubsystem, LoggedDashboardChooser<Branch> firstBranchChooser) {
+    chooser1 = firstBranchChooser;
+    drive = driveSubsystem;
+    addRequirements(drive);
+  }
 
-    @Override
-    public void initialize() {
-        ignoredFaces[0]=ignored[0].getBoolean(true);
-        ignoredFaces[1]=ignored[1].getBoolean(true);
-        ignoredFaces[2]=ignored[2].getBoolean(true);
-        ignoredFaces[3]=ignored[3].getBoolean(true);
-        ignoredFaces[4]=ignored[4].getBoolean(true);
-        ignoredFaces[5]=ignored[5].getBoolean(true);
-    }
+  @Override
+  public void initialize() {
+    firstBranch = chooser1.get();
+    SmartDashboard.putString("First Branch Selected", firstBranch.getLetter());
+  }
 
-    @Override
-    public void execute() {
-        
-    }
+  @Override
+  public void execute() {}
 
-    @Override
-    public void end(boolean interrupted) {
-        
-    }
+  @Override
+  public void end(boolean interrupted) {}
 }
