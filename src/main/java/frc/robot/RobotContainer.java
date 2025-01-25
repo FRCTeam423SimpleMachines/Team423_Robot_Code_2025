@@ -13,11 +13,13 @@
 
 package frc.robot;
 
+import static frc.robot.subsystems.drive.DriveConstants.kDefaultConstraints;
 import static frc.robot.subsystems.vision.VisionConstants.*;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -70,10 +72,10 @@ public class RobotContainer {
         vision =
             new Vision(
                 drive::addVisionMeasurement,
-                new VisionIOPhotonVision(camera1Name, robotToCamera1),
-                new VisionIOPhotonVision(camera2Name, robotToCamera2),
-                new VisionIOPhotonVision(camera3Name, robotToCamera3),
-                new VisionIOPhotonVision(camera4Name, robotToCamera4));
+                new VisionIOPhotonVision(camera1Name, robotToCamera1)); // ,
+        // new VisionIOPhotonVision(camera2Name, robotToCamera2),
+        // new VisionIOPhotonVision(camera3Name, robotToCamera3),
+        // new VisionIOPhotonVision(camera4Name, robotToCamera4));
         break;
 
       case SIM:
@@ -115,6 +117,12 @@ public class RobotContainer {
 
     // Set up auto routines
     autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
+
+    autoChooser.addOption(
+        "pathfinding test",
+        AutoBuilder.pathfindToPoseFlipped(
+            new Pose2d(2.817, 4.031, new Rotation2d(Units.degreesToRadians(-80.538))),
+            kDefaultConstraints));
 
     // Set up SysId routines
     autoChooser.addOption(
