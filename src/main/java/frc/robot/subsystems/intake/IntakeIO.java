@@ -7,6 +7,7 @@ public interface IntakeIO {
   public static class IntakeIOInputs {
     public double intakePosition = 0.0;
     public double intakeVelocity = 0.0;
+    public boolean coral = false;
   }
 
   public default void updateInputs(IntakeIOInputs inputs) {}
