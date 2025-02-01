@@ -13,11 +13,10 @@
 
 package frc.robot;
 
-import static frc.robot.subsystems.drive.DriveConstants.kDefaultConstraints;
+import static frc.robot.subsystems.drive.DriveConstants.*;
 import static frc.robot.subsystems.vision.VisionConstants.*;
 
 import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.path.PathPlannerPath;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
@@ -36,11 +35,11 @@ import frc.robot.subsystems.drive.GyroIONavX;
 import frc.robot.subsystems.drive.ModuleIO;
 import frc.robot.subsystems.drive.ModuleIOSim;
 import frc.robot.subsystems.drive.ModuleIOSpark;
-import frc.robot.util.Branch;
 import frc.robot.subsystems.vision.Vision;
 import frc.robot.subsystems.vision.VisionIO;
 import frc.robot.subsystems.vision.VisionIOPhotonVision;
 import frc.robot.subsystems.vision.VisionIOPhotonVisionSim;
+import frc.robot.util.Branch;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
 /**
@@ -59,7 +58,9 @@ public class RobotContainer {
 
   // Dashboard inputs
   private final LoggedDashboardChooser<Command> autoChooser;
-  private final LoggedDashboardChooser<Branch> branchChooser;
+  private final LoggedDashboardChooser<String> stationChooser;
+  private final LoggedDashboardChooser<Branch> branchChooser1;
+  private final LoggedDashboardChooser<Branch> branchChooser2;
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -119,50 +120,33 @@ public class RobotContainer {
         break;
     }
 
-    branchChooser = new LoggedDashboardChooser<>("1st Branch");
+    stationChooser = new LoggedDashboardChooser<>("Station Preference");
 
-    String[] branches = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L"};
+    stationChooser.addDefaultOption("Left", "Left");
+    stationChooser.addOption("Right", "Right");
 
-    branchChooser.addDefaultOption("A", new Branch("A"));
+    branchChooser1 = new LoggedDashboardChooser<>("1st Branch");
+    branchChooser2 = new LoggedDashboardChooser<>("2nd Branch");
+
+    final String[] branches = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L"};
+
+    branchChooser1.addDefaultOption("A", new Branch("A"));
     for (int i = 1; i < 12; i++) {
-      branchChooser.addOption(branches[i], new Branch(branches[i]));
+      branchChooser1.addOption(branches[i], new Branch(branches[i]));
+      branchChooser2.addOption(branches[i], new Branch(branches[i]));
     }
 
     // Set up auto routines
     autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
 
-    autoChooser.addOption("AutoScoring", new AutoScoring(drive, branchChooser));
-
-    // try {
-    //   Command toIJ =
-    //       AutoBuilder.pathfindThenFollowPath(
-    //           PathPlannerPath.fromPathFile("Reef IJ"), kDefaultConstraints);
-    //   Command toLeftStation =
-    //       AutoBuilder.pathfindThenFollowPath(
-    //           PathPlannerPath.fromPathFile("Left Station"), kDefaultConstraints);
-    //   Command toAB =
-    //       AutoBuilder.pathfindThenFollowPath(
-    //           PathPlannerPath.fromPathFile("Reef AB"), kDefaultConstraints);
-    //   // autoChooser.addOption("Multi Coral Test", new SequentialCommandGroup(toIJ));
-    //   autoChooser.addOption("IJ", toIJ);
-    // } catch (Exception e) {
-    //   e.printStackTrace();
-    // }
+    autoChooser.addOption(
+        "AutoScoring", new AutoScoring(drive, stationChooser, branchChooser1, branchChooser2));
 
     autoChooser.addOption(
         "pathfinding test",
         AutoBuilder.pathfindToPoseFlipped(
             new Pose2d(2.817, 4.031, new Rotation2d(Units.degreesToRadians(-80.538))),
             kDefaultConstraints));
-
-    try {
-      autoChooser.addOption(
-          "pathfind to path test",
-          AutoBuilder.pathfindThenFollowPath(
-              PathPlannerPath.fromPathFile("Test Path"), kDefaultConstraints));
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
 
     // Set up SysId routines
     autoChooser.addOption(
@@ -223,6 +207,13 @@ public class RobotContainer {
                             new Pose2d(drive.getPose().getTranslation(), new Rotation2d())),
                     drive)
                 .ignoringDisable(true));
+
+    controller
+        .button(ControlConstants.kAButton)
+        .onTrue(
+            AutoBuilder.pathfindToPoseFlipped(
+                new Pose2d(2.817, 4.031, new Rotation2d(Units.degreesToRadians(-180))),
+                kSlowConstraints));
   }
 
   /**

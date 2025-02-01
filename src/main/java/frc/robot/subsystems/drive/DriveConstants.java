@@ -124,4 +124,6 @@ public class DriveConstants {
   // Default Pathfinding Constraints
   public static final PathConstraints kDefaultConstraints =
       new PathConstraints(3.0, 4.0, Units.degreesToRadians(540), Units.degreesToRadians(720));
+  public static final PathConstraints kSlowConstraints =
+      new PathConstraints(0.5, 1.0, Units.degreesToRadians(540), Units.degreesToRadians(720));
 }
