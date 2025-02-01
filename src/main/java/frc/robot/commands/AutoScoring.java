@@ -1,11 +1,14 @@
 package frc.robot.commands;
 
+import static frc.robot.subsystems.drive.DriveConstants.kDefaultConstraints;
+
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.path.PathPlannerPath;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.util.Branch;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
-
-import com.pathplanner.lib.auto.AutoBuilder;
 
 public class AutoScoring extends Command {
 
@@ -37,7 +40,15 @@ public class AutoScoring extends Command {
 
   @Override
   public void execute() {
-    
+    try {
+      new SequentialCommandGroup(
+              AutoBuilder.followPath(PathPlannerPath.fromPathFile(firstBranch.getStartPath())),
+              AutoBuilder.followPath(PathPlannerPath.fromPathFile(firstBranch.getStartPath())),
+              AutoBuilder.pathfindToPose(secondBranch.getFacePose(), kDefaultConstraints))
+          .execute();
+    } catch (Exception e) {
+      end(true);
+    }
   }
 
   @Override
