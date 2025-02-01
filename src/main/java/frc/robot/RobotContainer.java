@@ -13,9 +13,14 @@
 
 package frc.robot;
 
+import static frc.robot.subsystems.drive.DriveConstants.kDefaultConstraints;
+import static frc.robot.subsystems.vision.VisionConstants.*;
+
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.path.PathPlannerPath;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -32,6 +37,10 @@ import frc.robot.subsystems.drive.ModuleIO;
 import frc.robot.subsystems.drive.ModuleIOSim;
 import frc.robot.subsystems.drive.ModuleIOSpark;
 import frc.robot.util.Branch;
+import frc.robot.subsystems.vision.Vision;
+import frc.robot.subsystems.vision.VisionIO;
+import frc.robot.subsystems.vision.VisionIOPhotonVision;
+import frc.robot.subsystems.vision.VisionIOPhotonVisionSim;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
 /**
@@ -43,6 +52,7 @@ import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 public class RobotContainer {
   // Subsystems
   private final Drive drive;
+  private final Vision vision;
 
   // Controller
   private final CommandJoystick controller = new CommandJoystick(0);
@@ -63,6 +73,13 @@ public class RobotContainer {
                 new ModuleIOSpark(1),
                 new ModuleIOSpark(2),
                 new ModuleIOSpark(3));
+        vision =
+            new Vision(
+                drive::addVisionMeasurement,
+                new VisionIOPhotonVision(cameraFrontName, robotToCameraFront),
+                new VisionIOPhotonVision(cameraLeftName, robotToCameraLeft),
+                new VisionIOPhotonVision(cameraRightName, robotToCameraRight),
+                new VisionIOPhotonVision(cameraBackName, robotToCameraBack));
         break;
 
       case SIM:
@@ -74,6 +91,13 @@ public class RobotContainer {
                 new ModuleIOSim(),
                 new ModuleIOSim(),
                 new ModuleIOSim());
+        vision =
+            new Vision(
+                drive::addVisionMeasurement,
+                new VisionIOPhotonVisionSim(cameraFrontName, robotToCameraFront, drive::getPose),
+                new VisionIOPhotonVisionSim(cameraLeftName, robotToCameraLeft, drive::getPose),
+                new VisionIOPhotonVisionSim(cameraRightName, robotToCameraRight, drive::getPose),
+                new VisionIOPhotonVisionSim(cameraBackName, robotToCameraBack, drive::getPose));
         break;
 
       default:
@@ -85,6 +109,13 @@ public class RobotContainer {
                 new ModuleIO() {},
                 new ModuleIO() {},
                 new ModuleIO() {});
+        vision =
+            new Vision(
+                drive::addVisionMeasurement,
+                new VisionIO() {},
+                new VisionIO() {},
+                new VisionIO() {},
+                new VisionIO() {});
         break;
     }
 
@@ -101,6 +132,37 @@ public class RobotContainer {
     autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
 
     autoChooser.addOption("AutoScoring", new AutoScoring(drive, branchChooser));
+
+    // try {
+    //   Command toIJ =
+    //       AutoBuilder.pathfindThenFollowPath(
+    //           PathPlannerPath.fromPathFile("Reef IJ"), kDefaultConstraints);
+    //   Command toLeftStation =
+    //       AutoBuilder.pathfindThenFollowPath(
+    //           PathPlannerPath.fromPathFile("Left Station"), kDefaultConstraints);
+    //   Command toAB =
+    //       AutoBuilder.pathfindThenFollowPath(
+    //           PathPlannerPath.fromPathFile("Reef AB"), kDefaultConstraints);
+    //   // autoChooser.addOption("Multi Coral Test", new SequentialCommandGroup(toIJ));
+    //   autoChooser.addOption("IJ", toIJ);
+    // } catch (Exception e) {
+    //   e.printStackTrace();
+    // }
+
+    autoChooser.addOption(
+        "pathfinding test",
+        AutoBuilder.pathfindToPoseFlipped(
+            new Pose2d(2.817, 4.031, new Rotation2d(Units.degreesToRadians(-80.538))),
+            kDefaultConstraints));
+
+    try {
+      autoChooser.addOption(
+          "pathfind to path test",
+          AutoBuilder.pathfindThenFollowPath(
+              PathPlannerPath.fromPathFile("Test Path"), kDefaultConstraints));
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
 
     // Set up SysId routines
     autoChooser.addOption(
@@ -134,8 +196,8 @@ public class RobotContainer {
     drive.setDefaultCommand(
         DriveCommands.joystickDrive(
             drive,
-            () -> controller.getRawAxis(ControlConstants.kLeftYAxis),
-            () -> controller.getRawAxis(ControlConstants.kLeftXAxis),
+            () -> -controller.getRawAxis(ControlConstants.kLeftYAxis),
+            () -> -controller.getRawAxis(ControlConstants.kLeftXAxis),
             () -> -controller.getRawAxis(ControlConstants.kRightXAxis)));
 
     // Lock to 0° when A button is held
