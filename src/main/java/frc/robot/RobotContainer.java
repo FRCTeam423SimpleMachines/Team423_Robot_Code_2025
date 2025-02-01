@@ -28,6 +28,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants.ControlConstants;
+import frc.robot.commands.AutoScoring;
 import frc.robot.commands.DriveCommands;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.GyroIO;
@@ -35,6 +36,7 @@ import frc.robot.subsystems.drive.GyroIONavX;
 import frc.robot.subsystems.drive.ModuleIO;
 import frc.robot.subsystems.drive.ModuleIOSim;
 import frc.robot.subsystems.drive.ModuleIOSpark;
+import frc.robot.util.Branch;
 import frc.robot.subsystems.vision.Vision;
 import frc.robot.subsystems.vision.VisionIO;
 import frc.robot.subsystems.vision.VisionIOPhotonVision;
@@ -57,6 +59,7 @@ public class RobotContainer {
 
   // Dashboard inputs
   private final LoggedDashboardChooser<Command> autoChooser;
+  private final LoggedDashboardChooser<Branch> branchChooser;
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -116,8 +119,19 @@ public class RobotContainer {
         break;
     }
 
+    branchChooser = new LoggedDashboardChooser<>("1st Branch");
+
+    String[] branches = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L"};
+
+    branchChooser.addDefaultOption("A", new Branch("A"));
+    for (int i = 1; i < 12; i++) {
+      branchChooser.addOption(branches[i], new Branch(branches[i]));
+    }
+
     // Set up auto routines
     autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
+
+    autoChooser.addOption("AutoScoring", new AutoScoring(drive, branchChooser));
 
     // try {
     //   Command toIJ =
