@@ -43,7 +43,7 @@ public class AutoScoring extends Command {
     try {
       new SequentialCommandGroup(
               AutoBuilder.followPath(PathPlannerPath.fromPathFile(firstBranch.getStartPath())),
-              AutoBuilder.followPath(PathPlannerPath.fromPathFile(firstBranch.getStartPath())),
+              AutoBuilder.followPath(PathPlannerPath.fromPathFile(firstBranch.getStationPath())),
               AutoBuilder.pathfindToPose(secondBranch.getFacePose(), kDefaultConstraints))
           .execute();
     } catch (Exception e) {
