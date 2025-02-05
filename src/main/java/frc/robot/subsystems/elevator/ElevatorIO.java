@@ -9,6 +9,8 @@ public interface ElevatorIO {
     public double secondStagePosition = 0.0;
     public double firstStageVelocity = 0.0;
     public double secondStageVelocity = 0.0;
+    public double firstPotPos = 0.0;
+    public double secondPotPos = 0.0;
   }
 
   public default void updateInputs(ElevatorIOInputs inputs) {}

@@ -12,7 +12,7 @@ public class ElevatorIOSim implements ElevatorIO {
   public ElevatorIOSim() {
     m_firstStageMotor =
         new DCMotorSim(
-            LinearSystemId.createDCMotorSystem(DCMotor.getNEO(1), 6.66e-6, 1), DCMotor.getNEO(1));
+            LinearSystemId.createDCMotorSystem(DCMotor.getNeoVortex(1), 6.66e-6, 1), DCMotor.getNeoVortex(1));
     m_secondStageMotor =
         new DCMotorSim(
             LinearSystemId.createDCMotorSystem(DCMotor.getNEO(1), 6.66e-6, 1), DCMotor.getNEO(1));
