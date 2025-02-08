@@ -20,6 +20,7 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants.ControlConstants;
@@ -30,6 +31,10 @@ import frc.robot.subsystems.drive.GyroIONavX;
 import frc.robot.subsystems.drive.ModuleIO;
 import frc.robot.subsystems.drive.ModuleIOSim;
 import frc.robot.subsystems.drive.ModuleIOSpark;
+import frc.robot.subsystems.lift.Lift;
+import frc.robot.subsystems.lift.LiftIO;
+import frc.robot.subsystems.lift.LiftIOSim;
+import frc.robot.subsystems.lift.LiftIOSpark;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
 /**
@@ -41,9 +46,11 @@ import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 public class RobotContainer {
   // Subsystems
   private final Drive drive;
+  private final Lift lift;
 
   // Controller
-  private final CommandJoystick controller = new CommandJoystick(0);
+  private final CommandJoystick controller1 = new CommandJoystick(0);
+  private final CommandJoystick controller2 = new CommandJoystick(1);
 
   // Dashboard inputs
   private final LoggedDashboardChooser<Command> autoChooser;
@@ -60,6 +67,8 @@ public class RobotContainer {
                 new ModuleIOSpark(1),
                 new ModuleIOSpark(2),
                 new ModuleIOSpark(3));
+        lift = new Lift(new LiftIOSpark());
+
         break;
 
       case SIM:
@@ -71,6 +80,8 @@ public class RobotContainer {
                 new ModuleIOSim(),
                 new ModuleIOSim(),
                 new ModuleIOSim());
+        lift = new Lift(new LiftIOSim());
+
         break;
 
       default:
@@ -82,6 +93,7 @@ public class RobotContainer {
                 new ModuleIO() {},
                 new ModuleIO() {},
                 new ModuleIO() {});
+        lift = new Lift(new LiftIO() {});
         break;
     }
 
@@ -120,25 +132,28 @@ public class RobotContainer {
     drive.setDefaultCommand(
         DriveCommands.joystickDrive(
             drive,
-            () -> controller.getRawAxis(ControlConstants.kLeftYAxis),
-            () -> controller.getRawAxis(ControlConstants.kLeftXAxis),
-            () -> -controller.getRawAxis(ControlConstants.kRightXAxis)));
+            () -> controller1.getRawAxis(ControlConstants.kLeftYAxis),
+            () -> controller1.getRawAxis(ControlConstants.kLeftXAxis),
+            () -> -controller1.getRawAxis(ControlConstants.kRightXAxis)));
+
+    lift.setDefaultCommand(
+        new RunCommand(() -> lift.run(-controller2.getRawAxis(ControlConstants.kLeftYAxis)), lift));
 
     // Lock to 0° when A button is held
-    controller
+    controller1
         .button(ControlConstants.kAButton)
         .whileTrue(
             DriveCommands.joystickDriveAtAngle(
                 drive,
-                () -> controller.getRawAxis(ControlConstants.kLeftYAxis),
-                () -> controller.getRawAxis(ControlConstants.kLeftXAxis),
+                () -> controller1.getRawAxis(ControlConstants.kLeftYAxis),
+                () -> controller1.getRawAxis(ControlConstants.kLeftXAxis),
                 () -> new Rotation2d()));
 
     // Switch to X pattern when X button is pressed
-    controller.button(ControlConstants.kXButton).onTrue(Commands.runOnce(drive::stopWithX, drive));
+    controller1.button(ControlConstants.kXButton).onTrue(Commands.runOnce(drive::stopWithX, drive));
 
     // Reset gyro to 0° when B button is pressed
-    controller
+    controller1
         .button(ControlConstants.kBButton)
         .onTrue(
             Commands.runOnce(
