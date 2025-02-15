@@ -36,15 +36,15 @@ import frc.robot.subsystems.drive.GyroIONavX;
 import frc.robot.subsystems.drive.ModuleIO;
 import frc.robot.subsystems.drive.ModuleIOSim;
 import frc.robot.subsystems.drive.ModuleIOSpark;
+import frc.robot.subsystems.elevator.Elevator;
+import frc.robot.subsystems.elevator.ElevatorIO;
+import frc.robot.subsystems.elevator.ElevatorIOSim;
+import frc.robot.subsystems.elevator.ElevatorIOSpark;
 import frc.robot.subsystems.vision.Vision;
 import frc.robot.subsystems.vision.VisionIO;
 import frc.robot.subsystems.vision.VisionIOPhotonVision;
 import frc.robot.subsystems.vision.VisionIOPhotonVisionSim;
 import frc.robot.util.Branch;
-import frc.robot.subsystems.elevator.Elevator;
-import frc.robot.subsystems.elevator.ElevatorIO;
-import frc.robot.subsystems.elevator.ElevatorIOSim;
-import frc.robot.subsystems.elevator.ElevatorIOSpark;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
 /**
@@ -193,9 +193,9 @@ public class RobotContainer {
     drive.setDefaultCommand(
         DriveCommands.joystickDrive(
             drive,
-            () -> -controller.getRawAxis(ControlConstants.kLeftYAxis),
-            () -> -controller.getRawAxis(ControlConstants.kLeftXAxis),
-            () -> -controller.getRawAxis(ControlConstants.kRightXAxis)));
+            () -> -controller1.getRawAxis(ControlConstants.kLeftYAxis),
+            () -> -controller1.getRawAxis(ControlConstants.kLeftXAxis),
+            () -> -controller1.getRawAxis(ControlConstants.kRightXAxis)));
 
     elevator.setDefaultCommand(
         new RunCommand(
@@ -225,7 +225,7 @@ public class RobotContainer {
                     drive)
                 .ignoringDisable(true));
 
-    controller
+    controller1
         .button(ControlConstants.kAButton)
         .onTrue(
             AutoBuilder.pathfindToPoseFlipped(
