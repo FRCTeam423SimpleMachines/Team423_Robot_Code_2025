@@ -12,21 +12,22 @@ public class ElevatorIOSim implements ElevatorIO {
   public ElevatorIOSim() {
     m_firstStageMotor =
         new DCMotorSim(
-            LinearSystemId.createDCMotorSystem(DCMotor.getNeoVortex(1), 6.66e-6, 1), DCMotor.getNeoVortex(1));
+            LinearSystemId.createDCMotorSystem(DCMotor.getNeoVortex(1), 6.66e-6, 1),
+            DCMotor.getNeoVortex(1));
     m_secondStageMotor =
         new DCMotorSim(
             LinearSystemId.createDCMotorSystem(DCMotor.getNEO(1), 6.66e-6, 1), DCMotor.getNEO(1));
   }
 
-  @Override
-  public void setFirstVoltage(double voltage) {
-    m_firstStageMotor.setInputVoltage(voltage);
-  }
+  // @Override
+  // public void setFirstVoltage(double voltage) {
+  //   m_firstStageMotor.setInputVoltage(voltage);
+  // }
 
-  @Override
-  public void setSecondVoltage(double voltage) {
-    m_secondStageMotor.setInputVoltage(voltage);
-  }
+  // @Override
+  // public void setSecondVoltage(double voltage) {
+  //   m_secondStageMotor.setInputVoltage(voltage);
+  // }
 
   @Override
   public void updateInputs(ElevatorIOInputs inputs) {

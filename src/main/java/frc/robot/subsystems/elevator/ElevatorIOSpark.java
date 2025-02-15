@@ -3,9 +3,9 @@ package frc.robot.subsystems.elevator;
 import static frc.robot.util.SparkUtil.*;
 
 import com.revrobotics.RelativeEncoder;
+import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
-import com.revrobotics.spark.SparkFlex;
 import edu.wpi.first.wpilibj.AnalogPotentiometer;
 import frc.robot.Constants.ElevatorConstants;
 
@@ -26,13 +26,13 @@ public class ElevatorIOSpark implements ElevatorIO {
   }
 
   @Override
-  public void setFirstVoltage(double voltage) {
-    m_firstStageMotor.setVoltage(voltage);
+  public void setFirstSpeed(double speed) {
+    m_firstStageMotor.set(speed);
   }
 
   @Override
-  public void setSecondVoltage(double voltage) {
-    m_secondStageMotor.setVoltage(voltage);
+  public void setSecondSpeed(double speed) {
+    m_secondStageMotor.set(speed);
   }
 
   @Override
@@ -53,6 +53,22 @@ public class ElevatorIOSpark implements ElevatorIO {
         m_secondStageMotor,
         m_secondStageEncoder::getVelocity,
         (value) -> inputs.secondStageVelocity = value);
+    ifOk(
+        m_firstStageMotor,
+        m_firstStageMotor::getBusVoltage,
+        (value) -> inputs.firstVoltage = value);
+    ifOk(
+        m_firstStageMotor,
+        m_firstStageMotor::getOutputCurrent,
+        (value) -> inputs.firstCurrunet = value);
+    ifOk(
+        m_secondStageMotor,
+        m_secondStageMotor::getBusVoltage,
+        (value) -> inputs.secondVoltage = value);
+    ifOk(
+        m_secondStageMotor,
+        m_secondStageMotor::getOutputCurrent,
+        (value) -> inputs.secondCurrunet = value);
 
     inputs.firstPotPos = m_firstStagePot.get();
   }

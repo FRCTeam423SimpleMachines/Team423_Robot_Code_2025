@@ -1,6 +1,5 @@
 package frc.robot.subsystems.elevator;
 
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import org.littletonrobotics.junction.Logger;
 
@@ -18,11 +17,18 @@ public class Elevator extends SubsystemBase {
     Logger.processInputs("Elavator", inputs);
   }
 
-  public Command runFisrtPercent(double percent) {
-    return runEnd(() -> io.setFirstVoltage(percent * 12.0), () -> io.setFirstVoltage(0));
+  public void runFirst(double speed) {
+    io.setFirstSpeed(speed);
   }
 
-  public Command runSecondPercent(double percent) {
-    return runEnd(() -> io.setSecondVoltage(percent * 12.0), () -> io.setSecondVoltage(0));
+  public void runSecond(double speed) {
+    io.setSecondSpeed(speed);
   }
+  // public Command runFirst(double speed) {
+  //   return runEnd(() -> io.setFirstSpeed(percent * 12.0), () -> io.setFirstVoltage(0));
+  // }
+
+  // public Command runSecond(double speed) {
+  //   return runEnd(() -> io.setSecondSpeed(percent * 12.0), () -> io.setSecondVoltage(0));
+  // }
 }

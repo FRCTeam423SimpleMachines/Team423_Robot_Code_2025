@@ -20,6 +20,7 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants.ControlConstants;
@@ -136,6 +137,10 @@ public class RobotContainer {
             () -> controller1.getRawAxis(ControlConstants.kLeftXAxis),
             () -> -controller1.getRawAxis(ControlConstants.kRightXAxis)));
 
+    elevator.setDefaultCommand(
+        new RunCommand(
+            () -> elevator.runFirst(-controller2.getRawAxis(ControlConstants.kRightYAxis)),
+            elevator));
     // Lock to 0° when A button is held
     controller1
         .button(ControlConstants.kAButton)
@@ -159,11 +164,6 @@ public class RobotContainer {
                             new Pose2d(drive.getPose().getTranslation(), new Rotation2d())),
                     drive)
                 .ignoringDisable(true));
-
-    controller2.button(ControlConstants.kBButton).whileTrue(elevator.runFisrtPercent(1.0));
-    controller2.button(ControlConstants.kAButton).whileTrue(elevator.runFisrtPercent(-1.0));
-    controller2.button(ControlConstants.kYButton).whileTrue(elevator.runSecondPercent(1.0));
-    controller2.button(ControlConstants.kXButton).whileTrue(elevator.runSecondPercent(-1.0));
   }
 
   /**

@@ -11,11 +11,15 @@ public interface ElevatorIO {
     public double secondStageVelocity = 0.0;
     public double firstPotPos = 0.0;
     public double secondPotPos = 0.0;
+    public double firstVoltage = 0.0;
+    public double firstCurrunet = 0.0;
+    public double secondVoltage = 0.0;
+    public double secondCurrunet = 0.0;
   }
 
   public default void updateInputs(ElevatorIOInputs inputs) {}
 
-  public default void setFirstVoltage(double voltage) {}
+  public default void setFirstSpeed(double speed) {}
 
-  public default void setSecondVoltage(double voltage) {}
+  public default void setSecondSpeed(double speed) {}
 }
