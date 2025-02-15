@@ -24,6 +24,7 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants.ControlConstants;
@@ -40,6 +41,10 @@ import frc.robot.subsystems.vision.VisionIO;
 import frc.robot.subsystems.vision.VisionIOPhotonVision;
 import frc.robot.subsystems.vision.VisionIOPhotonVisionSim;
 import frc.robot.util.Branch;
+import frc.robot.subsystems.elevator.Elevator;
+import frc.robot.subsystems.elevator.ElevatorIO;
+import frc.robot.subsystems.elevator.ElevatorIOSim;
+import frc.robot.subsystems.elevator.ElevatorIOSpark;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
 /**
@@ -52,9 +57,11 @@ public class RobotContainer {
   // Subsystems
   private final Drive drive;
   private final Vision vision;
+  private final Elevator elevator;
 
   // Controller
-  private final CommandJoystick controller = new CommandJoystick(0);
+  private final CommandJoystick controller1 = new CommandJoystick(0);
+  private final CommandJoystick controller2 = new CommandJoystick(1);
 
   // Dashboard inputs
   private final LoggedDashboardChooser<Command> autoChooser;
@@ -81,6 +88,8 @@ public class RobotContainer {
                 new VisionIOPhotonVision(cameraLeftName, robotToCameraLeft),
                 new VisionIOPhotonVision(cameraRightName, robotToCameraRight),
                 new VisionIOPhotonVision(cameraBackName, robotToCameraBack));
+
+        elevator = new Elevator(new ElevatorIOSpark());
         break;
 
       case SIM:
@@ -99,6 +108,8 @@ public class RobotContainer {
                 new VisionIOPhotonVisionSim(cameraLeftName, robotToCameraLeft, drive::getPose),
                 new VisionIOPhotonVisionSim(cameraRightName, robotToCameraRight, drive::getPose),
                 new VisionIOPhotonVisionSim(cameraBackName, robotToCameraBack, drive::getPose));
+
+        elevator = new Elevator(new ElevatorIOSim());
         break;
 
       default:
@@ -117,6 +128,8 @@ public class RobotContainer {
                 new VisionIO() {},
                 new VisionIO() {},
                 new VisionIO() {});
+
+        elevator = new Elevator(new ElevatorIO() {});
         break;
     }
 
@@ -184,21 +197,25 @@ public class RobotContainer {
             () -> -controller.getRawAxis(ControlConstants.kLeftXAxis),
             () -> -controller.getRawAxis(ControlConstants.kRightXAxis)));
 
+    elevator.setDefaultCommand(
+        new RunCommand(
+            () -> elevator.runFirst(-controller2.getRawAxis(ControlConstants.kRightYAxis)),
+            elevator));
     // Lock to 0° when A button is held
-    controller
+    controller1
         .button(ControlConstants.kAButton)
         .whileTrue(
             DriveCommands.joystickDriveAtAngle(
                 drive,
-                () -> controller.getRawAxis(ControlConstants.kLeftYAxis),
-                () -> controller.getRawAxis(ControlConstants.kLeftXAxis),
+                () -> controller1.getRawAxis(ControlConstants.kLeftYAxis),
+                () -> controller1.getRawAxis(ControlConstants.kLeftXAxis),
                 () -> new Rotation2d()));
 
     // Switch to X pattern when X button is pressed
-    controller.button(ControlConstants.kXButton).onTrue(Commands.runOnce(drive::stopWithX, drive));
+    controller1.button(ControlConstants.kXButton).onTrue(Commands.runOnce(drive::stopWithX, drive));
 
     // Reset gyro to 0° when B button is pressed
-    controller
+    controller1
         .button(ControlConstants.kBButton)
         .onTrue(
             Commands.runOnce(

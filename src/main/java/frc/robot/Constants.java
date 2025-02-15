@@ -58,4 +58,9 @@ public final class Constants {
     public static final int kControllerPort1 = 0;
     public static final int kControllerPort2 = 1;
   }
+
+  public static class ElevatorConstants {
+    public static final int firstStageCANID = 21;
+    public static final int secondStageCANID = 22;
+  }
 }
