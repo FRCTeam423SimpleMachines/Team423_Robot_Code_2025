@@ -62,7 +62,8 @@ public final class Constants {
   public static class ElevatorConstants {
     public static final int firstStageCANID = 21;
     public static final int secondStageCANID = 22;
-  }  
+  }
+
   public static class IntakeConstants {
     public static final int intakeCANID = 23;
   }
