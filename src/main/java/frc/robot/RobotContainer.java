@@ -45,6 +45,10 @@ import frc.robot.subsystems.vision.VisionIO;
 import frc.robot.subsystems.vision.VisionIOPhotonVision;
 import frc.robot.subsystems.vision.VisionIOPhotonVisionSim;
 import frc.robot.util.Branch;
+import frc.robot.subsystems.intake.Intake;
+import frc.robot.subsystems.intake.IntakeIO;
+import frc.robot.subsystems.intake.IntakeIOSim;
+import frc.robot.subsystems.intake.IntakeIOSpark;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
 /**
@@ -58,6 +62,7 @@ public class RobotContainer {
   private final Drive drive;
   private final Vision vision;
   private final Elevator elevator;
+  private final Intake intake;
 
   // Controller
   private final CommandJoystick controller1 = new CommandJoystick(0);
@@ -90,6 +95,7 @@ public class RobotContainer {
                 new VisionIOPhotonVision(cameraBackName, robotToCameraBack));
 
         elevator = new Elevator(new ElevatorIOSpark());
+        intake = new Intake(new IntakeIOSpark());
         break;
 
       case SIM:
@@ -110,6 +116,7 @@ public class RobotContainer {
                 new VisionIOPhotonVisionSim(cameraBackName, robotToCameraBack, drive::getPose));
 
         elevator = new Elevator(new ElevatorIOSim());
+        intake = new Intake(new IntakeIOSim());
         break;
 
       default:
@@ -130,6 +137,7 @@ public class RobotContainer {
                 new VisionIO() {});
 
         elevator = new Elevator(new ElevatorIO() {});
+        intake = new Intake(new IntakeIO() {});
         break;
     }
 
@@ -231,6 +239,10 @@ public class RobotContainer {
             AutoBuilder.pathfindToPoseFlipped(
                 new Pose2d(2.817, 4.031, new Rotation2d(Units.degreesToRadians(-180))),
                 kSlowConstraints));
+                
+    // Runs intake directly at half speed for testing
+    intake.setDefaultCommand(
+        intake.runPercent(0.5 * controller2.getRawAxis(ControlConstants.kLeftYAxis)));
   }
 
   /**
