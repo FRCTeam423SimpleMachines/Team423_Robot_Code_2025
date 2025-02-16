@@ -49,6 +49,10 @@ import frc.robot.subsystems.vision.VisionIO;
 import frc.robot.subsystems.vision.VisionIOPhotonVision;
 import frc.robot.subsystems.vision.VisionIOPhotonVisionSim;
 import frc.robot.util.Branch;
+import frc.robot.subsystems.lift.Lift;
+import frc.robot.subsystems.lift.LiftIO;
+import frc.robot.subsystems.lift.LiftIOSim;
+import frc.robot.subsystems.lift.LiftIOSpark;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
 /**
@@ -63,6 +67,7 @@ public class RobotContainer {
   private final Vision vision;
   private final Elevator elevator;
   private final Intake intake;
+  private final Lift lift;
 
   // Controller
   private final CommandJoystick controller1 = new CommandJoystick(0);
@@ -96,6 +101,8 @@ public class RobotContainer {
 
         elevator = new Elevator(new ElevatorIOSpark());
         intake = new Intake(new IntakeIOSpark());
+        lift = new Lift(new LiftIOSpark());
+
         break;
 
       case SIM:
@@ -117,6 +124,8 @@ public class RobotContainer {
 
         elevator = new Elevator(new ElevatorIOSim());
         intake = new Intake(new IntakeIOSim());
+        lift = new Lift(new LiftIOSim());
+
         break;
 
       default:
@@ -138,6 +147,7 @@ public class RobotContainer {
 
         elevator = new Elevator(new ElevatorIO() {});
         intake = new Intake(new IntakeIO() {});
+        lift = new Lift(new LiftIO() {});
         break;
     }
 
