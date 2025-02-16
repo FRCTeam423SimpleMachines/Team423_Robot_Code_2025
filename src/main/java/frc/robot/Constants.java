@@ -65,9 +65,9 @@ public final class Constants {
   }
 
   public static class IntakeConstants {
-    public static final int intakeCANID = 23;
+    public static final int intakeCANID = 24;
   }
-  
+
   public static class LiftConstants {
     public static final int kLiftCANID = 23;
   }

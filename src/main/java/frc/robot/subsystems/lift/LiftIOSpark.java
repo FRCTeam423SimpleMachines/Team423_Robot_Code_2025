@@ -3,9 +3,9 @@ package frc.robot.subsystems.lift;
 import static frc.robot.Constants.LiftConstants.*;
 import static frc.robot.util.SparkUtil.*;
 
-import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.RelativeEncoder;
+import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
 
 public class LiftIOSpark implements LiftIO {
