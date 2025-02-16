@@ -1,53 +1,68 @@
 package frc.robot.util;
 
+import static frc.robot.Constants.IntakeConstants.kIntakeCenterOffset;
 import static frc.robot.util.FieldConstants.*;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Transform2d;
 
 public class Branch {
 
   private final String letter;
-  private String startPath = "Start to ";
-  private String stationPath = "Station from ";
   private Pose2d branchPose;
+  private Pose2d stationPose;
 
   public Branch(String branchLetter) {
     letter = branchLetter.toUpperCase();
     switch (letter) {
       case "A":
+        branchPose = kBranchA;
+        stationPose = kLeftStation;
+        break;
       case "B":
-        startPath += "AB";
-        stationPath += "AB";
-        branchPose = FaceAB;
+        branchPose = kBranchB;
+        stationPose = kLeftStation;
         break;
       case "C":
+        branchPose = kBranchC;
+        stationPose = kRightStation;
+        break;
       case "D":
-        startPath += "CD";
-        stationPath += "CD";
-        branchPose = FaceCD;
+        branchPose = kBranchD;
+        stationPose = kRightStation;
         break;
       case "E":
+        branchPose = kBranchE;
+        stationPose = kRightStation;
+        break;
       case "F":
-        startPath += "EF";
-        stationPath += "EF";
-        branchPose = FaceEF;
+        branchPose = kBranchF;
+        stationPose = kRightStation;
         break;
       case "G":
+        branchPose = kBranchG;
+        stationPose = kLeftStation;
+        break;
       case "H":
-        startPath += "GH";
-        stationPath += "GH";
-        branchPose = FaceGH;
+        branchPose = kBranchH;
+        stationPose = kLeftStation;
         break;
       case "I":
-      case "J":
-        startPath += "IJ";
-        stationPath += "IJ";
-        branchPose = FaceIJ;
+        branchPose = kBranchI;
+        stationPose = kLeftStation;
         break;
-      default:
-        startPath += "KL";
-        stationPath += "KL";
-        branchPose = FaceKL;
+      case "J":
+        branchPose = kBranchJ;
+        stationPose = kLeftStation;
+        break;
+      case "K":
+        branchPose = kBranchK;
+        stationPose = kLeftStation;
+        break;
+      case "L":
+        branchPose = kBranchL;
+        stationPose = kLeftStation;
         break;
     }
   }
@@ -56,26 +71,26 @@ public class Branch {
     return letter;
   }
 
-  public String getStartPath() {
-    return startPath;
-  }
-
-  public String getStationPath() {
-    return stationPath;
-  }
-
   public void setRightStationPreference() {
     switch (letter) {
       case "A":
       case "B":
       case "H":
       case "G":
-        stationPath += " Right";
+        stationPose = kRightStation;
         break;
     }
   }
 
-  public Pose2d getFacePose() {
-    return branchPose;
+  public Pose2d getBranchPose() {
+    return branchPose.transformBy(
+      new Transform2d(
+        Math.sin(branchPose.getRotation().getRadians()) * kIntakeCenterOffset,
+        Math.cos(branchPose.getRotation().getRadians()) * kIntakeCenterOffset,
+        new Rotation2d()));
+  }
+
+  public Pose2d getStationPose() {
+    return stationPose;
   }
 }

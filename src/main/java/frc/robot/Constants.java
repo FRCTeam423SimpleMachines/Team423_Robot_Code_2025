@@ -13,6 +13,7 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.RobotBase;
 
 /**
@@ -66,6 +67,7 @@ public final class Constants {
 
   public static class IntakeConstants {
     public static final int intakeCANID = 24;
+    public static final double kIntakeCenterOffset = Units.inchesToMeters(4.0);
   }
 
   public static class LiftConstants {
