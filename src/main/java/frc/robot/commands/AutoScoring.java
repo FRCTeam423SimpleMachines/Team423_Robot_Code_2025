@@ -44,10 +44,10 @@ public class AutoScoring extends Command {
   @Override
   public void execute() {
     new SequentialCommandGroup(
-      AutoBuilder.pathfindToPoseFlipped(firstBranch.getBranchPose(), kDefaultConstraints),
-      AutoBuilder.pathfindToPoseFlipped(firstBranch.getStationPose(), kDefaultConstraints),
-      AutoBuilder.pathfindToPoseFlipped(firstBranch.getBranchPose(), kDefaultConstraints)
-    ).execute();
+            AutoBuilder.pathfindToPoseFlipped(firstBranch.getBranchPose(), kDefaultConstraints),
+            AutoBuilder.pathfindToPoseFlipped(firstBranch.getStationPose(), kDefaultConstraints),
+            AutoBuilder.pathfindToPoseFlipped(firstBranch.getBranchPose(), kDefaultConstraints))
+        .execute();
   }
 
   @Override
