@@ -19,7 +19,11 @@ public class Intake extends SubsystemBase {
     Logger.processInputs("Intake", inputs);
   }
 
-  public Command runPercent(double percent) {
-    return runEnd(() -> io.setVoltage(percent * 12.0), () -> io.setVoltage(0));
+  public void setSpeed(double speed) {
+    io.setSpeed(speed);
+  }
+
+  public boolean isCoral() {
+    return inputs.coral;
   }
 }

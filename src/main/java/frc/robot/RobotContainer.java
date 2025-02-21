@@ -15,6 +15,7 @@ package frc.robot;
 
 import static frc.robot.subsystems.drive.DriveConstants.*;
 import static frc.robot.subsystems.vision.VisionConstants.*;
+import static frc.robot.Constants.ControlConstants.*;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -30,6 +31,7 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants.ControlConstants;
 import frc.robot.commands.AutoScoring;
 import frc.robot.commands.DriveCommands;
+import frc.robot.commands.RunIntakeIn;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.GyroIO;
 import frc.robot.subsystems.drive.GyroIONavX;
@@ -48,6 +50,10 @@ import frc.robot.subsystems.lift.Lift;
 import frc.robot.subsystems.lift.LiftIO;
 import frc.robot.subsystems.lift.LiftIOSim;
 import frc.robot.subsystems.lift.LiftIOSpark;
+import frc.robot.subsystems.pivot.Pivot;
+import frc.robot.subsystems.pivot.PivotIO;
+import frc.robot.subsystems.pivot.PivotIOSim;
+import frc.robot.subsystems.pivot.PivotIOSpark;
 import frc.robot.subsystems.vision.Vision;
 import frc.robot.subsystems.vision.VisionIO;
 import frc.robot.subsystems.vision.VisionIOPhotonVision;
@@ -68,6 +74,7 @@ public class RobotContainer {
   private final Elevator elevator;
   private final Intake intake;
   private final Lift lift;
+  private final Pivot pivot;
 
   // Controller
   private final CommandJoystick controller1 = new CommandJoystick(0);
@@ -102,6 +109,7 @@ public class RobotContainer {
         elevator = new Elevator(new ElevatorIOSpark());
         intake = new Intake(new IntakeIOSpark());
         lift = new Lift(new LiftIOSpark());
+        pivot = new Pivot(new PivotIOSpark());
 
         break;
 
@@ -125,6 +133,7 @@ public class RobotContainer {
         elevator = new Elevator(new ElevatorIOSim());
         intake = new Intake(new IntakeIOSim());
         lift = new Lift(new LiftIOSim());
+        pivot = new Pivot(new PivotIOSim());
 
         break;
 
@@ -148,6 +157,7 @@ public class RobotContainer {
         elevator = new Elevator(new ElevatorIO() {});
         intake = new Intake(new IntakeIO() {});
         lift = new Lift(new LiftIO() {});
+        pivot = new Pivot(new PivotIO() {});
         break;
     }
 
@@ -250,9 +260,10 @@ public class RobotContainer {
                 new Pose2d(2.817, 4.031, new Rotation2d(Units.degreesToRadians(-180))),
                 kSlowConstraints));
 
-    // Runs intake directly at half speed for testing
-    intake.setDefaultCommand(
-        intake.runPercent(0.5 * controller2.getRawAxis(ControlConstants.kLeftYAxis)));
+    controller2.button(kRightBumper).onTrue(new RunIntakeIn(intake, 0.7));
+
+    controller2.button(kLeftBumper).onTrue(new RunCommand(() -> intake.setSpeed(-0.7), intake));
+    
   }
 
   /**

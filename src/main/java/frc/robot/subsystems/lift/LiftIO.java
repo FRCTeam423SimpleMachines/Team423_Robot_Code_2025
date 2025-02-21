@@ -5,8 +5,8 @@ import org.littletonrobotics.junction.AutoLog;
 public interface LiftIO {
   @AutoLog
   public static class LiftIOInputs {
-    public double liftPower;
-    public double liftPosotion;
+    public double liftPower = 0.0;
+    public double liftPosotion = 0.0;
   }
 
   public default void updateInputs(LiftIOInputs inputs) {}
