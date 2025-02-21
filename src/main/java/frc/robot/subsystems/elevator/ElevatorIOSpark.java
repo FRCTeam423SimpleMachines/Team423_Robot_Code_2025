@@ -1,11 +1,12 @@
 package frc.robot.subsystems.elevator;
 
-import static frc.robot.util.SparkUtil.*;
+import static frc.robot.util.SparkUtil.ifOk;
 
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
+
 import edu.wpi.first.wpilibj.AnalogPotentiometer;
 import frc.robot.Constants.ElevatorConstants;
 
@@ -33,6 +34,26 @@ public class ElevatorIOSpark implements ElevatorIO {
   @Override
   public void setSecondSpeed(double speed) {
     m_secondStageMotor.set(speed);
+  }
+
+  @Override
+  public double getFirstPosition() {
+    return m_firstStageEncoder.getPosition();
+  }
+
+  @Override
+  public double getSecondPosition() {
+    return m_secondStageEncoder.getPosition();
+  }
+
+  @Override
+  public double getFirstVelocity() {
+    return m_firstStageEncoder.getVelocity();
+  }
+
+  @Override
+  public double getSecondVelocity() {
+    return m_secondStageEncoder.getVelocity();
   }
 
   @Override

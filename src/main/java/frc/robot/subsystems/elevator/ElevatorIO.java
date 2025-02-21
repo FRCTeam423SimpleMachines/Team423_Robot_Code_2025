@@ -22,4 +22,20 @@ public interface ElevatorIO {
   public default void setFirstSpeed(double speed) {}
 
   public default void setSecondSpeed(double speed) {}
+
+  public default double getFirstPosition() {
+    return 0.0;
+  }
+
+  public default double getSecondPosition() {
+    return 0.0;
+  }
+
+  public default double getFirstVelocity() {
+    return 0.0;
+  }
+
+  public default double getSecondVelocity() {
+    return 0.0;
+  }
 }
