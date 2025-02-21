@@ -1,15 +1,10 @@
 package frc.robot.subsystems.intake;
 
-import static frc.robot.util.SparkUtil.*;
 import static frc.robot.Constants.IntakeConstants.*;
+import static frc.robot.util.SparkUtil.*;
 
-import com.revrobotics.RelativeEncoder;
-import com.revrobotics.spark.SparkLowLevel.MotorType;
-import com.revrobotics.spark.SparkMax;
 import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.PWM;
 import edu.wpi.first.wpilibj.motorcontrol.PWMTalonSRX;
-
 
 public class IntakeIOSpark implements IntakeIO {
   private final PWMTalonSRX m_intakeMotor;
@@ -27,7 +22,7 @@ public class IntakeIOSpark implements IntakeIO {
 
   @Override
   public void setSpeed(double speed) {
-      m_intakeMotor.set(speed);
+    m_intakeMotor.set(speed);
   }
 
   @Override

@@ -3,30 +3,30 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.intake.Intake;
 
-public class RunIntakeIn extends Command{
-    
-    private final Intake intake;
-    private final double speed;
+public class RunIntakeIn extends Command {
 
-    public RunIntakeIn(Intake intakeSubsytem, Double runSpeed) {
-        intake = intakeSubsytem;
-        speed = Math.abs(runSpeed);
+  private final Intake intake;
+  private final double speed;
 
-        addRequirements(intake);
-    }
+  public RunIntakeIn(Intake intakeSubsytem, Double runSpeed) {
+    intake = intakeSubsytem;
+    speed = Math.abs(runSpeed);
 
-    @Override
-    public void execute() {
-        intake.setSpeed(speed);
-    }
+    addRequirements(intake);
+  }
 
-    @Override
-    public boolean isFinished() {
-        return intake.isCoral();
-    }
+  @Override
+  public void execute() {
+    intake.setSpeed(speed);
+  }
 
-    @Override
-    public void end(boolean interrupted) {
-        intake.setSpeed(0.0);
-    }
+  @Override
+  public boolean isFinished() {
+    return intake.isCoral();
+  }
+
+  @Override
+  public void end(boolean interrupted) {
+    intake.setSpeed(0.0);
+  }
 }

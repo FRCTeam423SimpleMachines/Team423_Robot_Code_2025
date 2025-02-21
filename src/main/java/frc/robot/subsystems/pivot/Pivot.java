@@ -20,4 +20,8 @@ public class Pivot extends SubsystemBase {
   public void run(double speed) {
     io.setSpeed(speed);
   }
+
+  public double getPosition() {
+    return inputs.position;
+  }
 }

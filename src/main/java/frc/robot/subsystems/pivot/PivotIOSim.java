@@ -4,17 +4,18 @@ import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.system.plant.LinearSystemId;
 import edu.wpi.first.wpilibj.simulation.DCMotorSim;
 
-public class PivotIOSim implements PivotIO{
-    
-    private final DCMotorSim m_PivotMotor;
+public class PivotIOSim implements PivotIO {
 
-    public PivotIOSim() {
-        m_PivotMotor = new DCMotorSim(LinearSystemId.createDCMotorSystem(DCMotor.getNEO(1), 6.66e-6, 10),
-            DCMotor.getNEO(1));
-    }
+  private final DCMotorSim m_PivotMotor;
 
-    @Override
-    public void setSpeed(double speed) {
-        m_PivotMotor.setInputVoltage(12*speed);
-    }
+  public PivotIOSim() {
+    m_PivotMotor =
+        new DCMotorSim(
+            LinearSystemId.createDCMotorSystem(DCMotor.getNEO(1), 6.66e-6, 10), DCMotor.getNEO(1));
+  }
+
+  @Override
+  public void setSpeed(double speed) {
+    m_PivotMotor.setInputVoltage(12 * speed);
+  }
 }
