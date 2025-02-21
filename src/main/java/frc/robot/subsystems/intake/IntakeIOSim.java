@@ -21,8 +21,6 @@ public class IntakeIOSim implements IntakeIO {
 
   @Override
   public void updateInputs(IntakeIOInputs inputs) {
-    inputs.intakePosition = m_intakeMotor.getAngularPositionRotations();
-    inputs.intakeVelocity = m_intakeMotor.getAngularVelocityRPM();
     inputs.coral = false;
   }
 }

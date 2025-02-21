@@ -65,10 +65,14 @@ public final class Constants {
   }
 
   public static class IntakeConstants {
-    public static final int intakeCANID = 24;
+    public static final int kIntakeCANID = 24;
   }
 
   public static class LiftConstants {
     public static final int kLiftCANID = 23;
+  }
+
+  public static class PivotConstants {
+    public static final int kPivotCANID = 25;
   }
 }
