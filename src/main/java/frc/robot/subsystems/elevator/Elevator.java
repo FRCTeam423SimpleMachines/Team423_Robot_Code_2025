@@ -24,6 +24,15 @@ public class Elevator extends SubsystemBase {
   public void runSecond(double speed) {
     io.setSecondSpeed(speed);
   }
+
+  public double getFirstPos() {
+    return io.getFirstPosition();
+  }
+
+  public double getSecondPos() {
+    return io.getSecondPosition();
+  }
+
   // public Command runFirst(double speed) {
   //   return runEnd(() -> io.setFirstSpeed(percent * 12.0), () -> io.setFirstVoltage(0));
   // }

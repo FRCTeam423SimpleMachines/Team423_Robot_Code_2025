@@ -13,9 +13,9 @@
 
 package frc.robot;
 
+import static frc.robot.Constants.ControlConstants.*;
 import static frc.robot.subsystems.drive.DriveConstants.*;
 import static frc.robot.subsystems.vision.VisionConstants.*;
-import static frc.robot.Constants.ControlConstants.*;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -263,7 +263,6 @@ public class RobotContainer {
     controller2.button(kRightBumper).onTrue(new RunIntakeIn(intake, 0.7));
 
     controller2.button(kLeftBumper).onTrue(new RunCommand(() -> intake.setSpeed(-0.7), intake));
-    
   }
 
   /**
