@@ -263,6 +263,10 @@ public class RobotContainer {
     controller2.button(kRightBumper).onTrue(new RunIntakeIn(intake, 0.7));
 
     controller2.button(kLeftBumper).onTrue(new RunCommand(() -> intake.setSpeed(-0.7), intake));
+
+    controller2.button(kLeftTrigger).onTrue(new RunCommand(() -> lift.run(0.5), lift));
+
+    controller2.button(kRightTrigger).onTrue(new RunCommand(() -> lift.run(-0.5), lift)); 
   }
 
   /**
