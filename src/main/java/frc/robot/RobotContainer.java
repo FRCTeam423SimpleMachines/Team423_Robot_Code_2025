@@ -275,6 +275,10 @@ public class RobotContainer {
     controller2.button(kLeftBumper).onTrue(new RunCommand(() -> intake.setSpeed(-0.7), intake));
 
     controller1.button(kAButton).whileTrue(new RunCommand(() -> lights.setValue(kRed), lights));
+    
+    controller2.button(kLeftTrigger).onTrue(new RunCommand(() -> lift.run(0.5), lift));
+
+    controller2.button(kRightTrigger).onTrue(new RunCommand(() -> lift.run(-0.5), lift)); 
   }
 
   /**
