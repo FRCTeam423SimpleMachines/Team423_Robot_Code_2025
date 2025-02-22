@@ -75,4 +75,11 @@ public final class Constants {
   public static class PivotConstants {
     public static final int kPivotCANID = 25;
   }
+
+  public static class LightConstants {
+    public static final double kRed = 0.61;
+    public static final double kGreen = 0.77;
+    public static final double kBlue = 0.87;
+    public static final double kOff = 0.99;
+  }
 }

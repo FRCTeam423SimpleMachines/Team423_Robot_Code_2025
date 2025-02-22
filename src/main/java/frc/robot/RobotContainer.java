@@ -14,6 +14,7 @@
 package frc.robot;
 
 import static frc.robot.Constants.ControlConstants.*;
+import static frc.robot.Constants.LightConstants.*;
 import static frc.robot.subsystems.drive.DriveConstants.*;
 import static frc.robot.subsystems.vision.VisionConstants.*;
 
@@ -50,6 +51,9 @@ import frc.robot.subsystems.lift.Lift;
 import frc.robot.subsystems.lift.LiftIO;
 import frc.robot.subsystems.lift.LiftIOSim;
 import frc.robot.subsystems.lift.LiftIOSpark;
+import frc.robot.subsystems.lights.Lights;
+import frc.robot.subsystems.lights.LightsIO;
+import frc.robot.subsystems.lights.LightsIOReal;
 import frc.robot.subsystems.pivot.Pivot;
 import frc.robot.subsystems.pivot.PivotIO;
 import frc.robot.subsystems.pivot.PivotIOSim;
@@ -75,6 +79,7 @@ public class RobotContainer {
   private final Intake intake;
   private final Lift lift;
   private final Pivot pivot;
+  private final Lights lights;
 
   // Controller
   private final CommandJoystick controller1 = new CommandJoystick(0);
@@ -110,6 +115,7 @@ public class RobotContainer {
         intake = new Intake(new IntakeIOSpark());
         lift = new Lift(new LiftIOSpark());
         pivot = new Pivot(new PivotIOSpark());
+        lights = new Lights(new LightsIOReal());
 
         break;
 
@@ -134,6 +140,7 @@ public class RobotContainer {
         intake = new Intake(new IntakeIOSim());
         lift = new Lift(new LiftIOSim());
         pivot = new Pivot(new PivotIOSim());
+        lights = new Lights(new LightsIO() {});
 
         break;
 
@@ -158,6 +165,7 @@ public class RobotContainer {
         intake = new Intake(new IntakeIO() {});
         lift = new Lift(new LiftIO() {});
         pivot = new Pivot(new PivotIO() {});
+        lights = new Lights(new LightsIO() {});
         break;
     }
 
@@ -229,6 +237,8 @@ public class RobotContainer {
         new RunCommand(
             () -> elevator.runFirst(-controller2.getRawAxis(ControlConstants.kRightYAxis)),
             elevator));
+
+    lights.setDefaultCommand(new RunCommand(() -> lights.setValue(kOff), lights));
     // Lock to 0° when A button is held
     controller1
         .button(ControlConstants.kAButton)
@@ -260,9 +270,11 @@ public class RobotContainer {
                 new Pose2d(2.817, 4.031, new Rotation2d(Units.degreesToRadians(-180))),
                 kSlowConstraints));
 
-    controller2.button(kRightBumper).onTrue(new RunIntakeIn(intake, 0.7));
+    controller2.button(kRightBumper).onTrue(new RunIntakeIn(intake, lights, 0.7));
 
     controller2.button(kLeftBumper).onTrue(new RunCommand(() -> intake.setSpeed(-0.7), intake));
+
+    controller1.button(kAButton).whileTrue(new RunCommand(() -> lights.setValue(kRed), lights));
   }
 
   /**
