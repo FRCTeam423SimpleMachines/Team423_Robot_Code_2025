@@ -6,32 +6,29 @@ import frc.robot.subsystems.elevator.Elevator;
 
 public class RunElevatorPos extends Command {
   private final Elevator elevator;
-  private final double firstPos;
-  private final double secondPos;
-  private final PIDController firstStageController = new PIDController(0, 0, 0);
-  private final PIDController secondStageController = new PIDController(0, 0, 0);
+  private final double elevatorPos;
+  private final PIDController elevatorController = new PIDController(0, 0, 0);
 
-  public RunElevatorPos(Elevator elevator, double firstPos, double secondPos) {
+  public RunElevatorPos(Elevator elevator, double elevatorPos) {
     this.elevator = elevator;
-    this.firstPos = firstPos;
-    this.secondPos = secondPos;
+    this.elevatorPos = elevatorPos;
+    addRequirements(elevator);
   }
 
   @Override
   public void initialize() {
-    firstStageController.setSetpoint(firstPos);
-    secondStageController.setSetpoint(secondPos);
+    elevatorController.setSetpoint(elevatorPos);
   }
 
   @Override
   public void execute() {
-    elevator.runFirst(firstStageController.calculate(elevator.getFirstPos()));
-    elevator.runSecond(secondStageController.calculate(elevator.getSecondPos()));
+    elevator.runFirst(elevatorController.calculate(elevator.getTotalPos()));
+    elevator.runSecond(elevatorController.calculate(elevator.getTotalPos()));
   }
 
   @Override
   public boolean isFinished() {
-    return firstStageController.atSetpoint() && secondStageController.atSetpoint();
+    return elevatorController.atSetpoint();
   }
 
   @Override

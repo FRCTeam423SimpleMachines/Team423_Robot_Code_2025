@@ -62,6 +62,11 @@ public final class Constants {
   public static class ElevatorConstants {
     public static final int firstStageCANID = 21;
     public static final int secondStageCANID = 22;
+    public static final double firstUpperBound = 0;
+    public static final double firstLowerBound = 0;
+    public static final double secondUpperBound = 0;
+    public static final double secondLowerBound = 0;
+    public static final double elevatorOffset = 0;
   }
 
   public static class IntakeConstants {

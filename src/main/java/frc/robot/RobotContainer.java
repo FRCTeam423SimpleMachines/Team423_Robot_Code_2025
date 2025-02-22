@@ -239,6 +239,12 @@ public class RobotContainer {
             elevator));
 
     lights.setDefaultCommand(new RunCommand(() -> lights.setValue(kOff), lights));
+
+    lift.setDefaultCommand(
+        new RunCommand(
+            () -> lift.run(-controller2.getRawAxis(ControlConstants.kLeftYAxis)),
+            lift));
+
     // Lock to 0° when A button is held
     controller1
         .button(ControlConstants.kAButton)
@@ -275,10 +281,10 @@ public class RobotContainer {
     controller2.button(kLeftBumper).onTrue(new RunCommand(() -> intake.setSpeed(-0.7), intake));
 
     controller1.button(kAButton).whileTrue(new RunCommand(() -> lights.setValue(kRed), lights));
-    
-    controller2.button(kLeftTrigger).onTrue(new RunCommand(() -> lift.run(0.5), lift));
 
-    controller2.button(kRightTrigger).onTrue(new RunCommand(() -> lift.run(-0.5), lift)); 
+    // controller2.button(kBButton).whileTrue(new RunCommand(() -> lift.run(.3), lift));
+
+    // controller2.button(kAButton).whileTrue(new RunCommand(() -> lift.run(-0.3), lift));
   }
 
   /**

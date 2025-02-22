@@ -1,5 +1,6 @@
 package frc.robot.subsystems.elevator;
 
+import static frc.robot.Constants.ElevatorConstants.*;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import org.littletonrobotics.junction.Logger;
 
@@ -18,10 +19,22 @@ public class Elevator extends SubsystemBase {
   }
 
   public void runFirst(double speed) {
+    if((getFirstPos() >= firstUpperBound) && (speed > 0)) {
+      speed = 0;
+    }
+    if((getFirstPos() <= firstLowerBound) && (speed < 0)) {
+      speed = 0;
+    }
     io.setFirstSpeed(speed);
   }
 
   public void runSecond(double speed) {
+    if((getSecondPos() >= secondUpperBound) && (speed > 0)) {
+      speed = 0;
+    }
+    if((getSecondPos() <= secondLowerBound) && (speed < 0)) {
+      speed = 0;
+    }
     io.setSecondSpeed(speed);
   }
 
@@ -31,6 +44,10 @@ public class Elevator extends SubsystemBase {
 
   public double getSecondPos() {
     return io.getSecondPosition();
+  }
+
+  public double getTotalPos() {
+    return (getFirstPos() + getSecondPos() + elevatorOffset);
   }
 
   // public Command runFirst(double speed) {
