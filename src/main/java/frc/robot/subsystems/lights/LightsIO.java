@@ -6,6 +6,7 @@ public interface LightsIO {
   @AutoLog
   public static class LightsIOInputs {
     public double color = 0.0;
+    public String currentCommand = "None";
   }
 
   public default void updateInputs(LightsIOInputs inputs) {}
