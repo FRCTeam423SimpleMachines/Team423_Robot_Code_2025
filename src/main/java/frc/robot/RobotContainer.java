@@ -22,14 +22,11 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.GenericHID;
-import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
-import frc.robot.Constants.ControlConstants;
 import frc.robot.commands.AutoScoring;
 import frc.robot.commands.DriveCommands;
 import frc.robot.commands.RunIntakeIn;
@@ -229,36 +226,34 @@ public class RobotContainer {
     drive.setDefaultCommand(
         DriveCommands.joystickDrive(
             drive,
-            () -> -controller1.getRawAxis(ControlConstants.kLeftYAxis),
-            () -> -controller1.getRawAxis(ControlConstants.kLeftXAxis),
-            () -> -controller1.getRawAxis(ControlConstants.kRightXAxis)));
+            () -> -controller1.getRawAxis(kLeftYAxis),
+            () -> -controller1.getRawAxis(kLeftXAxis),
+            () -> -controller1.getRawAxis(kRightXAxis)));
 
     elevator.setDefaultCommand(
-        new RunCommand(
-            () -> elevator.runFirst(-controller2.getRawAxis(ControlConstants.kRightYAxis)),
-            elevator));
+        new RunCommand(() -> elevator.runFirst(-controller2.getRawAxis(kRightYAxis)), elevator));
 
     lights.setDefaultCommand(new RunCommand(() -> lights.setValue(kOff), lights));
 
     lift.setDefaultCommand(
-        new RunCommand(() -> lift.run(-controller2.getRawAxis(ControlConstants.kLeftYAxis)), lift));
+        new RunCommand(() -> lift.run(-controller2.getRawAxis(kLeftYAxis)), lift));
 
     // Lock to 0° when A button is held
     controller1
-        .button(ControlConstants.kAButton)
+        .button(kAButton)
         .whileTrue(
             DriveCommands.joystickDriveAtAngle(
                 drive,
-                () -> controller1.getRawAxis(ControlConstants.kLeftYAxis),
-                () -> controller1.getRawAxis(ControlConstants.kLeftXAxis),
+                () -> controller1.getRawAxis(kLeftYAxis),
+                () -> controller1.getRawAxis(kLeftXAxis),
                 () -> new Rotation2d()));
 
     // Switch to X pattern when X button is pressed
-    controller1.button(ControlConstants.kXButton).onTrue(Commands.runOnce(drive::stopWithX, drive));
+    controller1.button(kXButton).onTrue(Commands.runOnce(drive::stopWithX, drive));
 
     // Reset gyro to 0° when B button is pressed
     controller1
-        .button(ControlConstants.kBButton)
+        .button(kBButton)
         .onTrue(
             Commands.runOnce(
                     () ->
@@ -268,7 +263,7 @@ public class RobotContainer {
                 .ignoringDisable(true));
 
     controller1
-        .button(ControlConstants.kAButton)
+        .button(kAButton)
         .onTrue(
             AutoBuilder.pathfindToPoseFlipped(
                 new Pose2d(2.817, 4.031, new Rotation2d(Units.degreesToRadians(-180))),
