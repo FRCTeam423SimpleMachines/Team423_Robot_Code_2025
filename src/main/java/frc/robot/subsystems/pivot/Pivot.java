@@ -14,6 +14,12 @@ public class Pivot extends SubsystemBase {
   @Override
   public void periodic() {
     io.updateInputs(inputs);
+    if(getCurrentCommand()!=null){
+      inputs.currentCommand = getCurrentCommand().getName();
+    }
+    else {
+      inputs.currentCommand = "None";
+    }
     Logger.processInputs("Pivot", inputs);
   }
 

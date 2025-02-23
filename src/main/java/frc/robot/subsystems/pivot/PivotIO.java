@@ -8,6 +8,7 @@ public interface PivotIO {
     public double position = 0.0;
     public double voltage = 0.0;
     public double current = 0.0;
+    public String currentCommand = "None";
   }
 
   public default void updateInputs(PivotIOInputs inputs) {}

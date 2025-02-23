@@ -7,6 +7,7 @@ public interface LiftIO {
   public static class LiftIOInputs {
     public double liftPower = 0.0;
     public double liftPosotion = 0.0;
+    public string currentCommand = "None";
   }
 
   public default void updateInputs(LiftIOInputs inputs) {}
