@@ -22,8 +22,9 @@ public class RunElevatorPos extends Command {
 
   @Override
   public void execute() {
-    elevator.runFirst(elevatorController.calculate(elevator.getTotalPos()));
-    elevator.runSecond(elevatorController.calculate(elevator.getTotalPos()));
+    double calc = elevatorController.calculate(elevator.getTotalPos());
+    elevator.runFirst(calc);
+    elevator.runSecond(calc);
   }
 
   @Override

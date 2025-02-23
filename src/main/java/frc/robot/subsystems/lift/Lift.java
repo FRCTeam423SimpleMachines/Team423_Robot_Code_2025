@@ -15,6 +15,11 @@ public class Lift extends SubsystemBase {
   @Override
   public void periodic() {
     io.updateInputs(inputs);
+    if (getCurrentCommand() != null) {
+      inputs.currentCommand = getCurrentCommand().getName();
+    } else {
+      inputs.currentCommand = "None";
+    }
     Logger.processInputs("Lift", inputs);
   }
 

@@ -14,10 +14,9 @@ public class Lights extends SubsystemBase {
   @Override
   public void periodic() {
     io.updateInputs(inputs);
-    if(getCurrentCommand()!=null){
+    if (getCurrentCommand() != null) {
       inputs.currentCommand = getCurrentCommand().getName();
-    }
-    else {
+    } else {
       inputs.currentCommand = "None";
     }
     Logger.processInputs("Lights", inputs);

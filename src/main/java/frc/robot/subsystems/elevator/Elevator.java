@@ -1,6 +1,7 @@
 package frc.robot.subsystems.elevator;
 
 import static frc.robot.Constants.ElevatorConstants.*;
+
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import org.littletonrobotics.junction.Logger;
 
@@ -15,30 +16,29 @@ public class Elevator extends SubsystemBase {
   @Override
   public void periodic() {
     io.updateInputs(inputs);
-    if(getCurrentCommand()!=null){
+    if (getCurrentCommand() != null) {
       inputs.currentCommand = getCurrentCommand().getName();
-    }
-    else {
+    } else {
       inputs.currentCommand = "None";
     }
     Logger.processInputs("Elavator", inputs);
   }
 
   public void runFirst(double speed) {
-    if((getFirstPos() >= firstUpperBound) && (speed > 0)) {
+    if ((getFirstPos() >= firstUpperBound) && (speed > 0)) {
       speed = 0;
     }
-    if((getFirstPos() <= firstLowerBound) && (speed < 0)) {
+    if ((getFirstPos() <= firstLowerBound) && (speed < 0)) {
       speed = 0;
     }
     io.setFirstSpeed(speed);
   }
 
   public void runSecond(double speed) {
-    if((getSecondPos() >= secondUpperBound) && (speed > 0)) {
+    if ((getSecondPos() >= secondUpperBound) && (speed > 0)) {
       speed = 0;
     }
-    if((getSecondPos() <= secondLowerBound) && (speed < 0)) {
+    if ((getSecondPos() <= secondLowerBound) && (speed < 0)) {
       speed = 0;
     }
     io.setSecondSpeed(speed);

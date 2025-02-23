@@ -241,9 +241,7 @@ public class RobotContainer {
     lights.setDefaultCommand(new RunCommand(() -> lights.setValue(kOff), lights));
 
     lift.setDefaultCommand(
-        new RunCommand(
-            () -> lift.run(-controller2.getRawAxis(ControlConstants.kLeftYAxis)),
-            lift));
+        new RunCommand(() -> lift.run(-controller2.getRawAxis(ControlConstants.kLeftYAxis)), lift));
 
     // Lock to 0° when A button is held
     controller1

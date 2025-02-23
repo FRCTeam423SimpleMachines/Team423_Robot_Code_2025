@@ -6,6 +6,7 @@ public interface IntakeIO {
   @AutoLog
   public static class IntakeIOInputs {
     public boolean coral = false;
+    public String currentCommand = "None";
   }
 
   public default void updateInputs(IntakeIOInputs inputs) {}
