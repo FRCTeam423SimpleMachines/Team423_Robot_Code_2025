@@ -103,10 +103,10 @@ public class RobotContainer {
         vision =
             new Vision(
                 drive::addVisionMeasurement,
-                new VisionIOPhotonVision(cameraFrontName, robotToCameraFrontLeft),
-                new VisionIOPhotonVision(cameraLeftName, robotToCameraFrontRight),
-                new VisionIOPhotonVision(cameraRightName, robotToCameraBackLeft),
-                new VisionIOPhotonVision(cameraBackName, robotToCameraBackRight));
+                new VisionIOPhotonVision(cameraFrontLeftName, robotToCameraFrontLeft),
+                new VisionIOPhotonVision(cameraFrontRightName, robotToCameraFrontRight),
+                new VisionIOPhotonVision(cameraBackLeftName,  robotToCameraBackLeft),
+                new VisionIOPhotonVision(cameraBackRightName,robotToCameraBackRight));
 
         elevator = new Elevator(new ElevatorIOSpark());
         intake = new Intake(new IntakeIOSpark());
@@ -128,10 +128,10 @@ public class RobotContainer {
         vision =
             new Vision(
                 drive::addVisionMeasurement,
-                new VisionIOPhotonVisionSim(cameraFrontName, robotToCameraFrontLeft, drive::getPose),
-                new VisionIOPhotonVisionSim(cameraLeftName, robotToCameraFrontRight, drive::getPose),
-                new VisionIOPhotonVisionSim(cameraRightName, robotToCameraBackLeft, drive::getPose),
-                new VisionIOPhotonVisionSim(cameraBackName, robotToCameraBackRight, drive::getPose));
+                new VisionIOPhotonVisionSim(cameraFrontLeftName, robotToCameraFrontLeft, drive::getPose),
+                new VisionIOPhotonVisionSim(cameraFrontRightName, robotToCameraFrontRight, drive::getPose),
+                new VisionIOPhotonVisionSim(cameraBackLeftName, robotToCameraBackLeft, drive::getPose),
+                new VisionIOPhotonVisionSim(cameraBackRightName, robotToCameraBackRight, drive::getPose));
 
         elevator = new Elevator(new ElevatorIOSim());
         intake = new Intake(new IntakeIOSim());
