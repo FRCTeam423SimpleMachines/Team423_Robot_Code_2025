@@ -12,7 +12,7 @@ public class IntakeIOSpark implements IntakeIO {
 
   public IntakeIOSpark() {
     m_intakeMotor = new TalonSRX(kIntakeCANID);
-    sensorInput = new DigitalInput(0);
+    sensorInput = new DigitalInput(kOpticChannel);
   }
 
   @Override

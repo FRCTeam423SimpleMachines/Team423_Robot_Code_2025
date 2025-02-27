@@ -1,6 +1,7 @@
 package frc.robot.subsystems.elevator;
 
 import static frc.robot.util.SparkUtil.ifOk;
+import static frc.robot.Constants.ElevatorConstants.*;
 
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkFlex;
@@ -16,13 +17,15 @@ public class ElevatorIOSpark implements ElevatorIO {
   private final RelativeEncoder m_firstStageEncoder;
   private final RelativeEncoder m_secondStageEncoder;
   private final AnalogPotentiometer m_firstStagePot;
+  private final AnalogPotentiometer m_secondStagePot;
 
   public ElevatorIOSpark() {
-    m_firstStageMotor = new SparkFlex(ElevatorConstants.firstStageCANID, MotorType.kBrushless);
-    m_secondStageMotor = new SparkMax(ElevatorConstants.secondStageCANID, MotorType.kBrushless);
+    m_firstStageMotor = new SparkFlex(ElevatorConstants.kFirstStageCANID, MotorType.kBrushless);
+    m_secondStageMotor = new SparkMax(ElevatorConstants.kSecondStageCANID, MotorType.kBrushless);
     m_firstStageEncoder = m_firstStageMotor.getEncoder();
     m_secondStageEncoder = m_secondStageMotor.getEncoder();
-    m_firstStagePot = new AnalogPotentiometer(1);
+    m_firstStagePot = new AnalogPotentiometer(kFirstPotChannel, potToInchesFactor, firstPotOffset);
+    m_secondStagePot = new AnalogPotentiometer(kSecondPotChanel, potToInchesFactor, secondPotOffset);
   }
 
   @Override

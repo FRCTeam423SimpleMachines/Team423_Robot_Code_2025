@@ -60,8 +60,13 @@ public final class Constants {
   }
 
   public static class ElevatorConstants {
-    public static final int firstStageCANID = 21;
-    public static final int secondStageCANID = 22;
+    public static final int kFirstStageCANID = 21;
+    public static final int kSecondStageCANID = 22;
+    public static final int kFirstPotChannel = 0;
+    public static final int kSecondPotChanel = 1;
+    public static final double firstPotOffset = 0.0;
+    public static final double secondPotOffset = 0.0;
+    public static final double potToInchesFactor = 0.0;
     public static final double firstUpperBound = 0;
     public static final double firstLowerBound = 0;
     public static final double secondUpperBound = 0;
@@ -71,6 +76,7 @@ public final class Constants {
 
   public static class IntakeConstants {
     public static final int kIntakeCANID = 24;
+    public static final int kOpticChannel = 0;
   }
 
   public static class LiftConstants {
