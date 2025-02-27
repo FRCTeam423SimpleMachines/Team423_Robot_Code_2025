@@ -25,37 +25,37 @@ public class VisionConstants {
       AprilTagFieldLayout.loadField(AprilTagFields.kDefaultField);
 
   // Camera names, must match names configured on coprocessor
-  public static String cameraFrontName = "front";
-  public static String cameraLeftName = "left";
-  public static String cameraRightName = "right";
-  public static String cameraBackName = "back";
+  public static String cameraFrontName = "frontleft";
+  public static String cameraLeftName = "frontright";
+  public static String cameraRightName = "backleft";
+  public static String cameraBackName = "backright";
 
   // Robot to camera transforms
   // (Not used by Limelight, configure in web UI instead)
-  public static Transform3d robotToCameraFront =
+  public static Transform3d robotToCameraFrontLeft =
       new Transform3d(
-          Units.inchesToMeters(12.0),
-          Units.inchesToMeters(-.25),
-          Units.inchesToMeters(3.875),
-          new Rotation3d(0.0, 0.0, 0));
-  public static Transform3d robotToCameraLeft =
+          Units.inchesToMeters(11.5),
+          Units.inchesToMeters(11),
+          Units.inchesToMeters(9.25),
+          new Rotation3d(0.0, 0.0, Math.PI / 4.0));
+  public static Transform3d robotToCameraFrontRight =
       new Transform3d(
-          Units.inchesToMeters(-1.5),
-          Units.inchesToMeters(12.0),
-          Units.inchesToMeters(3.875),
-          new Rotation3d(0.0, 0.0, Math.PI / 2.0));
-  public static Transform3d robotToCameraRight =
+          Units.inchesToMeters(11.5),
+          Units.inchesToMeters(-10.5),
+          Units.inchesToMeters(9.25),
+          new Rotation3d(0.0, 0.0, -Math.PI / 4.0));
+  public static Transform3d robotToCameraBackLeft =
       new Transform3d(
-          Units.inchesToMeters(1.25),
-          Units.inchesToMeters(-12.0),
-          Units.inchesToMeters(3.875),
-          new Rotation3d(0.0, 0.0, -Math.PI / 2.0));
-  public static Transform3d robotToCameraBack =
+          Units.inchesToMeters(-11.5),
+          Units.inchesToMeters(10.5),
+          Units.inchesToMeters(9.75),
+          new Rotation3d(0.0, 0.0, 3.0 * Math.PI / 4.0));
+  public static Transform3d robotToCameraBackRight =
       new Transform3d(
-          Units.inchesToMeters(-12.0),
-          0.0,
-          Units.inchesToMeters(3.875),
-          new Rotation3d(Math.PI, 0.0, -Math.PI));
+          Units.inchesToMeters(-11.5),
+          Units.inchesToMeters(-10.5),
+          Units.inchesToMeters(10),
+          new Rotation3d(Math.PI, 0.0, -3.0 * Math.PI / 4.0));
 
   // Basic filtering thresholds
   public static double maxAmbiguity = 0.1;
