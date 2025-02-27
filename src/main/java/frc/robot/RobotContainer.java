@@ -231,7 +231,7 @@ public class RobotContainer {
             () -> -controller1.getRawAxis(kRightXAxis)));
 
     elevator.setDefaultCommand(
-        new RunCommand(() -> elevator.runFirst(-controller2.getRawAxis(kRightYAxis)), elevator));
+        new RunCommand(() -> elevator.testFirst(-controller2.getRawAxis(kRightYAxis)), elevator));
 
     lights.setDefaultCommand(new RunCommand(() -> lights.setValue(kOff), lights));
 
