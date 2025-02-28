@@ -15,7 +15,7 @@ public class RunIntakeIn extends Command {
   public RunIntakeIn(Intake intakeSubsytem, Lights lightSubsystem, Double runSpeed) {
     intake = intakeSubsytem;
     lights = lightSubsystem;
-    speed = Math.abs(runSpeed);
+    speed = -Math.abs(runSpeed);
 
     addRequirements(intake);
   }

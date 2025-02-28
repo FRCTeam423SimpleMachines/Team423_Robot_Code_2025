@@ -21,6 +21,7 @@ public class Elevator extends SubsystemBase {
     } else {
       inputs.currentCommand = "None";
     }
+    inputs.totalHeight = getTotalPos();
     Logger.processInputs("Elavator", inputs);
   }
 
@@ -56,8 +57,14 @@ public class Elevator extends SubsystemBase {
     return (getFirstPos() + getSecondPos() + elevatorOffset);
   }
 
-  public void testFirst(double speed) {
-    io.setFirstSpeed(speed);
+  public void test(double speed1, double speed2) {
+    io.setFirstSpeed(speed1);
+    io.setSecondSpeed(speed2);
+  }
+
+  public void runBoth(double speed1, double speed2) {
+    runFirst(speed1);
+    runSecond(speed2);
   }
 
   // public Command runSecond(double speed) {

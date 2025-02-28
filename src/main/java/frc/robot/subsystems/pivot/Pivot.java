@@ -22,7 +22,7 @@ public class Pivot extends SubsystemBase {
     Logger.processInputs("Pivot", inputs);
   }
 
-  public void run(double speed) {
+  public void runPow(double speed) {
     io.setSpeed(speed);
   }
 

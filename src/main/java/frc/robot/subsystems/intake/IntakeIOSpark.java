@@ -17,11 +17,11 @@ public class IntakeIOSpark implements IntakeIO {
 
   @Override
   public void setSpeed(double speed) {
-    m_intakeMotor.set(ControlMode.Position, speed);
+    m_intakeMotor.set(ControlMode.PercentOutput, speed);
   }
 
   @Override
   public void updateInputs(IntakeIOInputs inputs) {
-    inputs.coral = sensorInput.get();
+    inputs.coral = !sensorInput.get();
   }
 }

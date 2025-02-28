@@ -5,7 +5,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.pivot.Pivot;
 
 public class PivotToPosition extends Command {
-  private final PIDController pivotController = new PIDController(0, 0, 0);
+  private final PIDController pivotController = new PIDController(0.01, 0, 0);
   private final Pivot pivot;
   private final double position;
 
@@ -16,17 +16,13 @@ public class PivotToPosition extends Command {
 
   @Override
   public void initialize() {
+    pivotController.enableContinuousInput(0, 360);
     pivotController.setSetpoint(position);
   }
 
   @Override
   public void execute() {
-    pivot.run(pivotController.calculate(pivot.getPosition()));
-  }
-
-  @Override
-  public boolean isFinished() {
-    return pivotController.atSetpoint();
+    pivot.runPow(-pivotController.calculate(pivot.getPosition()));
   }
 
   @Override

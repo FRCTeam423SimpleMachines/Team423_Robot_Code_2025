@@ -15,6 +15,7 @@ public interface ElevatorIO {
     public double firstCurrunet = 0.0;
     public double secondVoltage = 0.0;
     public double secondCurrunet = 0.0;
+    public double totalHeight = 0.0;
     public String currentCommand = "None";
   }
 

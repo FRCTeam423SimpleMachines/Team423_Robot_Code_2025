@@ -1,7 +1,7 @@
 package frc.robot.subsystems.elevator;
 
-import static frc.robot.util.SparkUtil.ifOk;
 import static frc.robot.Constants.ElevatorConstants.*;
+import static frc.robot.util.SparkUtil.ifOk;
 
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkFlex;
@@ -24,8 +24,10 @@ public class ElevatorIOSpark implements ElevatorIO {
     m_secondStageMotor = new SparkMax(ElevatorConstants.kSecondStageCANID, MotorType.kBrushless);
     m_firstStageEncoder = m_firstStageMotor.getEncoder();
     m_secondStageEncoder = m_secondStageMotor.getEncoder();
-    m_firstStagePot = new AnalogPotentiometer(kFirstPotChannel, potToInchesFactor, firstPotOffset);
-    m_secondStagePot = new AnalogPotentiometer(kSecondPotChanel, potToInchesFactor, secondPotOffset);
+    m_firstStagePot =
+        new AnalogPotentiometer(kFirstPotChannel, firstPotToInchesFactor, firstPotOffset);
+    m_secondStagePot =
+        new AnalogPotentiometer(kSecondPotChanel, secondPotToInchesFactor, secondPotOffset);
   }
 
   @Override
@@ -40,12 +42,12 @@ public class ElevatorIOSpark implements ElevatorIO {
 
   @Override
   public double getFirstPosition() {
-    return m_firstStageEncoder.getPosition();
+    return m_firstStagePot.get();
   }
 
   @Override
   public double getSecondPosition() {
-    return m_secondStageEncoder.getPosition();
+    return m_secondStagePot.get();
   }
 
   @Override
@@ -94,5 +96,6 @@ public class ElevatorIOSpark implements ElevatorIO {
         (value) -> inputs.secondCurrunet = value);
 
     inputs.firstPotPos = m_firstStagePot.get();
+    inputs.secondPotPos = m_secondStagePot.get();
   }
 }

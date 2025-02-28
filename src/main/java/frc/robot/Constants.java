@@ -64,14 +64,15 @@ public final class Constants {
     public static final int kSecondStageCANID = 22;
     public static final int kFirstPotChannel = 0;
     public static final int kSecondPotChanel = 1;
-    public static final double firstPotOffset = 0.0;
-    public static final double secondPotOffset = 0.0;
-    public static final double potToInchesFactor = 0.0;
-    public static final double firstUpperBound = 0;
-    public static final double firstLowerBound = 0;
-    public static final double secondUpperBound = 0;
-    public static final double secondLowerBound = 0;
-    public static final double elevatorOffset = 0;
+    public static final double firstPotOffset = -0.35;
+    public static final double secondPotOffset = -2.853;
+    public static final double firstPotToInchesFactor = 26.375 / 0.762;
+    public static final double secondPotToInchesFactor = 24.875 / 0.621;
+    public static final double firstUpperBound = 25.375;
+    public static final double firstLowerBound = 1;
+    public static final double secondUpperBound = 23.875;
+    public static final double secondLowerBound = 1;
+    public static final double elevatorOffset = 28;
   }
 
   public static class IntakeConstants {

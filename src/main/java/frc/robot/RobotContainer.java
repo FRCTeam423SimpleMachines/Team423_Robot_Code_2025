@@ -19,6 +19,7 @@ import static frc.robot.subsystems.drive.DriveConstants.*;
 import static frc.robot.subsystems.vision.VisionConstants.*;
 
 import com.pathplanner.lib.auto.AutoBuilder;
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
@@ -29,6 +30,8 @@ import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.commands.AutoScoring;
 import frc.robot.commands.DriveCommands;
+import frc.robot.commands.ElevatorPivotCommand;
+import frc.robot.commands.PivotToPosition;
 import frc.robot.commands.RunIntakeIn;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.GyroIO;
@@ -105,8 +108,8 @@ public class RobotContainer {
                 drive::addVisionMeasurement,
                 new VisionIOPhotonVision(cameraFrontLeftName, robotToCameraFrontLeft),
                 new VisionIOPhotonVision(cameraFrontRightName, robotToCameraFrontRight),
-                new VisionIOPhotonVision(cameraBackLeftName,  robotToCameraBackLeft),
-                new VisionIOPhotonVision(cameraBackRightName,robotToCameraBackRight));
+                new VisionIOPhotonVision(cameraBackLeftName, robotToCameraBackLeft),
+                new VisionIOPhotonVision(cameraBackRightName, robotToCameraBackRight));
 
         elevator = new Elevator(new ElevatorIOSpark());
         intake = new Intake(new IntakeIOSpark());
@@ -128,10 +131,14 @@ public class RobotContainer {
         vision =
             new Vision(
                 drive::addVisionMeasurement,
-                new VisionIOPhotonVisionSim(cameraFrontLeftName, robotToCameraFrontLeft, drive::getPose),
-                new VisionIOPhotonVisionSim(cameraFrontRightName, robotToCameraFrontRight, drive::getPose),
-                new VisionIOPhotonVisionSim(cameraBackLeftName, robotToCameraBackLeft, drive::getPose),
-                new VisionIOPhotonVisionSim(cameraBackRightName, robotToCameraBackRight, drive::getPose));
+                new VisionIOPhotonVisionSim(
+                    cameraFrontLeftName, robotToCameraFrontLeft, drive::getPose),
+                new VisionIOPhotonVisionSim(
+                    cameraFrontRightName, robotToCameraFrontRight, drive::getPose),
+                new VisionIOPhotonVisionSim(
+                    cameraBackLeftName, robotToCameraBackLeft, drive::getPose),
+                new VisionIOPhotonVisionSim(
+                    cameraBackRightName, robotToCameraBackRight, drive::getPose));
 
         elevator = new Elevator(new ElevatorIOSim());
         intake = new Intake(new IntakeIOSim());
@@ -230,13 +237,17 @@ public class RobotContainer {
             () -> -controller1.getRawAxis(kLeftXAxis),
             () -> -controller1.getRawAxis(kRightXAxis)));
 
-    elevator.setDefaultCommand(
-        new RunCommand(() -> elevator.testFirst(-controller2.getRawAxis(kRightYAxis)), elevator));
+    elevator.setDefaultCommand(new RunCommand(() -> elevator.runBoth(0.0, 0.0), elevator));
 
     lights.setDefaultCommand(new RunCommand(() -> lights.setValue(kOff), lights));
 
-    lift.setDefaultCommand(
-        new RunCommand(() -> lift.run(-controller2.getRawAxis(kLeftYAxis)), lift));
+    intake.setDefaultCommand(
+        new RunCommand(() -> intake.setSpeed(controller2.getRawAxis(kRightTrigger)), intake));
+
+    pivot.setDefaultCommand(new RunCommand(() -> pivot.runPow(0.0), pivot));
+
+    // lift.setDefaultCommand(
+    //     new RunCommand(() -> lift.run(-controller2.getRawAxis(kLeftYAxis)), lift));
 
     // Lock to 0° when A button is held
     controller1
@@ -247,6 +258,15 @@ public class RobotContainer {
                 () -> controller1.getRawAxis(kLeftYAxis),
                 () -> controller1.getRawAxis(kLeftXAxis),
                 () -> new Rotation2d()));
+
+    controller1
+        .button(kRightBumper)
+        .whileTrue(
+            DriveCommands.joystickDriveAtAngle(
+                drive,
+                () -> controller1.getRawAxis(kLeftYAxis),
+                () -> controller1.getRawAxis(kLeftXAxis),
+                () -> drive.getRotation()));
 
     // Switch to X pattern when X button is pressed
     controller1.button(kXButton).onTrue(Commands.runOnce(drive::stopWithX, drive));
@@ -262,18 +282,37 @@ public class RobotContainer {
                     drive)
                 .ignoringDisable(true));
 
-    controller1
+    controller2
+        .axisGreaterThan(kLeftTrigger, 0.75)
+        .whileTrue(
+            new RunCommand(
+                () ->
+                    elevator.test(
+                        MathUtil.applyDeadband(-controller2.getRawAxis(kRightYAxis), 0.06),
+                        MathUtil.applyDeadband(-controller2.getRawAxis(kLeftYAxis), 0.06)),
+                elevator));
+
+    controller2.button(kRightBumper).onTrue(new RunIntakeIn(intake, lights, -1.0));
+
+    controller2.button(kLeftBumper).whileTrue(new RunCommand(() -> intake.setSpeed(1.0), intake));
+
+    controller2
         .button(kAButton)
-        .onTrue(
-            AutoBuilder.pathfindToPoseFlipped(
-                new Pose2d(2.817, 4.031, new Rotation2d(Units.degreesToRadians(-180))),
-                kSlowConstraints));
+        .onTrue(new ElevatorPivotCommand(elevator, pivot, 0.0, 25.97)); // Station
 
-    controller2.button(kRightBumper).onTrue(new RunIntakeIn(intake, lights, 0.7));
+    controller2.button(kBButton).onTrue(new ElevatorPivotCommand(elevator, pivot, 48.0, 0.0));
 
-    controller2.button(kLeftBumper).onTrue(new RunCommand(() -> intake.setSpeed(-0.7), intake));
+    controller2.button(kXButton).onTrue(new ElevatorPivotCommand(elevator, pivot, 37.5, 35.0));
 
-    controller1.button(kAButton).whileTrue(new RunCommand(() -> lights.setValue(kRed), lights));
+    controller2.button(kYButton).onTrue(new ElevatorPivotCommand(elevator, pivot, 48, 340)); // L4
+
+    controller2.povUp().whileTrue(new RunCommand(() -> pivot.runPow(0.3), intake));
+
+    controller2.povDown().whileTrue(new RunCommand(() -> pivot.runPow(-0.3), intake));
+
+    // controller2.button(kAButton).onTrue(new RunElevatorPos(elevator, 48.0));
+
+    controller2.button(kYButton).onTrue(new PivotToPosition(pivot, 90.0));
 
     // controller2.button(kBButton).whileTrue(new RunCommand(() -> lift.run(.3), lift));
 

@@ -7,7 +7,7 @@ import frc.robot.subsystems.elevator.Elevator;
 public class RunElevatorPos extends Command {
   private final Elevator elevator;
   private final double elevatorPos;
-  private final PIDController elevatorController = new PIDController(0, 0, 0);
+  private final PIDController elevatorController = new PIDController(0.1, 0, 0);
 
   public RunElevatorPos(Elevator elevator, double elevatorPos) {
     this.elevator = elevator;
