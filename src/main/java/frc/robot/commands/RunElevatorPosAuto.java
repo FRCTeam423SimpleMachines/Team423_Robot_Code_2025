@@ -4,12 +4,12 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.elevator.Elevator;
 
-public class RunElevatorPos extends Command {
+public class RunElevatorPosAuto extends Command {
   private final Elevator elevator;
   private final double elevatorPos;
   private final PIDController elevatorController = new PIDController(1, 0, 0);
 
-  public RunElevatorPos(Elevator elevator, double elevatorPos) {
+  public RunElevatorPosAuto(Elevator elevator, double elevatorPos) {
     this.elevator = elevator;
     this.elevatorPos = elevatorPos;
     addRequirements(elevator);
@@ -25,6 +25,11 @@ public class RunElevatorPos extends Command {
     double calc = elevatorController.calculate(elevator.getTotalPos());
     elevator.runFirst(calc);
     elevator.runSecond(calc);
+  }
+
+  @Override
+  public boolean isFinished() {
+    return elevatorController.atSetpoint();
   }
 
   @Override

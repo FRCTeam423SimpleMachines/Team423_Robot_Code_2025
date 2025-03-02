@@ -65,21 +65,21 @@ public final class Constants {
     public static final int kSecondStageCANID = 22;
     public static final int kFirstPotChannel = 0;
     public static final int kSecondPotChanel = 1;
-    public static final double firstPotOffset = -0.35;
-    public static final double secondPotOffset = -2.853;
-    public static final double firstPotToInchesFactor = 26.375 / 0.762;
-    public static final double secondPotToInchesFactor = 24.875 / 0.621;
-    public static final double firstUpperBound = 25.375;
-    public static final double firstLowerBound = 1;
-    public static final double secondUpperBound = 23.875;
-    public static final double secondLowerBound = 1;
+    public static final double firstPotOffset = -0.007;
+    public static final double secondPotOffset = -1.282;
+    public static final double firstPotToInchesFactor = 26.375 / 0.801;
+    public static final double secondPotToInchesFactor = 24.875 / 0.78;
+    public static final double firstUpperBound = 25.9;
+    public static final double firstLowerBound = 0.52;
+    public static final double secondUpperBound = 23.6;
+    public static final double secondLowerBound = 0.1;
     public static final double elevatorOffset = 28;
   }
 
   public static class IntakeConstants {
     public static final int kIntakeCANID = 24;
     public static final int kOpticChannel = 0;
-    public static final double kIntakeCenterOffset = Units.inchesToMeters(4.0);
+    public static final double kIntakeCenterOffset = Units.inchesToMeters(4.125);
   }
 
   public static class LiftConstants {

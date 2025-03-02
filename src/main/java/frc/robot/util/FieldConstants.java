@@ -36,4 +36,6 @@ public class FieldConstants {
       new Pose2d(1.103, 7.064, new Rotation2d(Units.degreesToRadians(-55.0)));
   public static final Pose2d kRightStation =
       new Pose2d(1.103, 1.003, new Rotation2d(Units.degreesToRadians(-55.0)));
+
+  public static final double kReefOffset = Units.inchesToMeters(-5);
 }

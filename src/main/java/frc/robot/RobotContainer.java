@@ -19,6 +19,7 @@ import static frc.robot.subsystems.drive.DriveConstants.*;
 import static frc.robot.subsystems.vision.VisionConstants.*;
 
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -31,7 +32,8 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.commands.AutoScoring;
 import frc.robot.commands.DriveCommands;
 import frc.robot.commands.ElevatorPivotCommand;
-import frc.robot.commands.PivotToPosition;
+import frc.robot.commands.PivotToPositionAuto;
+import frc.robot.commands.RunElevatorPosAuto;
 import frc.robot.commands.RunIntakeIn;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.GyroIO;
@@ -47,10 +49,6 @@ import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.intake.IntakeIO;
 import frc.robot.subsystems.intake.IntakeIOSim;
 import frc.robot.subsystems.intake.IntakeIOSpark;
-import frc.robot.subsystems.lift.Lift;
-import frc.robot.subsystems.lift.LiftIO;
-import frc.robot.subsystems.lift.LiftIOSim;
-import frc.robot.subsystems.lift.LiftIOSpark;
 import frc.robot.subsystems.lights.Lights;
 import frc.robot.subsystems.lights.LightsIO;
 import frc.robot.subsystems.lights.LightsIOReal;
@@ -63,6 +61,7 @@ import frc.robot.subsystems.vision.VisionIO;
 import frc.robot.subsystems.vision.VisionIOPhotonVision;
 import frc.robot.subsystems.vision.VisionIOPhotonVisionSim;
 import frc.robot.util.Branch;
+import frc.robot.util.FieldConstants;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
 /**
@@ -77,7 +76,7 @@ public class RobotContainer {
   private final Vision vision;
   private final Elevator elevator;
   private final Intake intake;
-  private final Lift lift;
+  // private final Lift lift;
   private final Pivot pivot;
   private final Lights lights;
 
@@ -113,7 +112,7 @@ public class RobotContainer {
 
         elevator = new Elevator(new ElevatorIOSpark());
         intake = new Intake(new IntakeIOSpark());
-        lift = new Lift(new LiftIOSpark());
+        // lift = new Lift(new LiftIOSpark());
         pivot = new Pivot(new PivotIOSpark());
         lights = new Lights(new LightsIOReal());
 
@@ -142,7 +141,7 @@ public class RobotContainer {
 
         elevator = new Elevator(new ElevatorIOSim());
         intake = new Intake(new IntakeIOSim());
-        lift = new Lift(new LiftIOSim());
+        // lift = new Lift(new LiftIOSim());
         pivot = new Pivot(new PivotIOSim());
         lights = new Lights(new LightsIO() {});
 
@@ -167,11 +166,15 @@ public class RobotContainer {
 
         elevator = new Elevator(new ElevatorIO() {});
         intake = new Intake(new IntakeIO() {});
-        lift = new Lift(new LiftIO() {});
+        // lift = new Lift(new LiftIO() {});
         pivot = new Pivot(new PivotIO() {});
         lights = new Lights(new LightsIO() {});
         break;
     }
+
+    NamedCommands.registerCommand("ElevatorL4", new RunElevatorPosAuto(elevator, 77.0));
+    NamedCommands.registerCommand("PivotScore", new PivotToPositionAuto(pivot, 340));
+    NamedCommands.registerCommand("IntakeOut", new RunCommand(() -> intake.setSpeed(1.0), intake));
 
     stationChooser = new LoggedDashboardChooser<>("Station Preference");
 
@@ -184,6 +187,7 @@ public class RobotContainer {
     final String[] branches = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L"};
 
     branchChooser1.addDefaultOption("A", new Branch("A"));
+    branchChooser2.addDefaultOption("A", new Branch("A"));
     for (int i = 1; i < 12; i++) {
       branchChooser1.addOption(branches[i], new Branch(branches[i]));
       branchChooser2.addOption(branches[i], new Branch(branches[i]));
@@ -193,7 +197,9 @@ public class RobotContainer {
     autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
 
     autoChooser.addOption(
-        "AutoScoring", new AutoScoring(drive, stationChooser, branchChooser1, branchChooser2));
+        "AutoScoring",
+        new AutoScoring(
+            drive, elevator, pivot, intake, stationChooser, branchChooser1, branchChooser2));
 
     autoChooser.addOption(
         "pathfinding test",
@@ -259,15 +265,6 @@ public class RobotContainer {
                 () -> controller1.getRawAxis(kLeftXAxis),
                 () -> new Rotation2d()));
 
-    controller1
-        .button(kRightBumper)
-        .whileTrue(
-            DriveCommands.joystickDriveAtAngle(
-                drive,
-                () -> controller1.getRawAxis(kLeftYAxis),
-                () -> controller1.getRawAxis(kLeftXAxis),
-                () -> drive.getRotation()));
-
     // Switch to X pattern when X button is pressed
     controller1.button(kXButton).onTrue(Commands.runOnce(drive::stopWithX, drive));
 
@@ -282,29 +279,38 @@ public class RobotContainer {
                     drive)
                 .ignoringDisable(true));
 
+    controller1
+        .button(kRightBumper)
+        .whileTrue(
+            DriveCommands.joystickDriveRobotRelative(
+                drive,
+                () -> -controller1.getRawAxis(kLeftYAxis),
+                () -> -controller1.getRawAxis(kLeftXAxis),
+                () -> 0.0));
+
     controller2
         .axisGreaterThan(kLeftTrigger, 0.75)
         .whileTrue(
             new RunCommand(
                 () ->
-                    elevator.test(
+                    elevator.runBoth(
                         MathUtil.applyDeadband(-controller2.getRawAxis(kRightYAxis), 0.06),
                         MathUtil.applyDeadband(-controller2.getRawAxis(kLeftYAxis), 0.06)),
                 elevator));
 
-    controller2.button(kRightBumper).onTrue(new RunIntakeIn(intake, lights, -1.0));
+    controller2.button(kRightBumper).onTrue(new RunIntakeIn(intake, -0.7));
 
     controller2.button(kLeftBumper).whileTrue(new RunCommand(() -> intake.setSpeed(1.0), intake));
 
     controller2
         .button(kAButton)
-        .onTrue(new ElevatorPivotCommand(elevator, pivot, 0.0, 25.97)); // Station
+        .onTrue(new ElevatorPivotCommand(elevator, pivot, 28.0, 30)); // Station
 
-    controller2.button(kBButton).onTrue(new ElevatorPivotCommand(elevator, pivot, 48.0, 0.0));
+    controller2.button(kBButton).onTrue(new ElevatorPivotCommand(elevator, pivot, 53.0, 340)); // L3
 
-    controller2.button(kXButton).onTrue(new ElevatorPivotCommand(elevator, pivot, 37.5, 35.0));
+    controller2.button(kXButton).onTrue(new ElevatorPivotCommand(elevator, pivot, 28.0, 90.0));
 
-    controller2.button(kYButton).onTrue(new ElevatorPivotCommand(elevator, pivot, 48, 340)); // L4
+    controller2.button(kYButton).onTrue(new ElevatorPivotCommand(elevator, pivot, 77.0, 340)); // L4
 
     controller2.povUp().whileTrue(new RunCommand(() -> pivot.runPow(0.3), intake));
 
@@ -312,11 +318,86 @@ public class RobotContainer {
 
     // controller2.button(kAButton).onTrue(new RunElevatorPos(elevator, 48.0));
 
-    controller2.button(kYButton).onTrue(new PivotToPosition(pivot, 90.0));
-
     // controller2.button(kBButton).whileTrue(new RunCommand(() -> lift.run(.3), lift));
 
     // controller2.button(kAButton).whileTrue(new RunCommand(() -> lift.run(-0.3), lift));
+
+    if (controller1.button(kYButton).getAsBoolean()) {
+      controller1
+          .povUp()
+          .onTrue(
+              AutoBuilder.pathfindToPoseFlipped(
+                  new Branch("G").getBranchPose(), kDefaultConstraints));
+      controller1
+          .povDown()
+          .onTrue(
+              AutoBuilder.pathfindToPoseFlipped(
+                  new Branch("A").getBranchPose(), kDefaultConstraints));
+      controller1
+          .povUpRight()
+          .onTrue(
+              AutoBuilder.pathfindToPoseFlipped(
+                  new Branch("E").getBranchPose(), kDefaultConstraints));
+      controller1
+          .povUpLeft()
+          .onTrue(
+              AutoBuilder.pathfindToPoseFlipped(
+                  new Branch("I").getBranchPose(), kDefaultConstraints));
+      controller1
+          .povDownRight()
+          .onTrue(
+              AutoBuilder.pathfindToPoseFlipped(
+                  new Branch("C").getBranchPose(), kDefaultConstraints));
+      controller1
+          .povDownLeft()
+          .onTrue(
+              AutoBuilder.pathfindToPoseFlipped(
+                  new Branch("K").getBranchPose(), kDefaultConstraints));
+    } else {
+      controller1
+          .povUp()
+          .onTrue(
+              AutoBuilder.pathfindToPoseFlipped(
+                  new Branch("H").getBranchPose(), kDefaultConstraints));
+      controller1
+          .povDown()
+          .onTrue(
+              AutoBuilder.pathfindToPoseFlipped(
+                  new Branch("B").getBranchPose(), kDefaultConstraints));
+      controller1
+          .povUpRight()
+          .onTrue(
+              AutoBuilder.pathfindToPoseFlipped(
+                  new Branch("F").getBranchPose(), kDefaultConstraints));
+      controller1
+          .povUpLeft()
+          .onTrue(
+              AutoBuilder.pathfindToPoseFlipped(
+                  new Branch("J").getBranchPose(), kDefaultConstraints));
+      controller1
+          .povDownRight()
+          .onTrue(
+              AutoBuilder.pathfindToPoseFlipped(
+                  new Branch("D").getBranchPose(), kDefaultConstraints));
+      controller1
+          .povDownLeft()
+          .onTrue(
+              AutoBuilder.pathfindToPoseFlipped(
+                  new Branch("L").getBranchPose(), kDefaultConstraints));
+    }
+
+    controller1
+        .povLeft()
+        .onTrue(
+            AutoBuilder.pathfindToPoseFlipped(FieldConstants.kLeftStation, kDefaultConstraints));
+    controller1
+        .povRight()
+        .onTrue(
+            AutoBuilder.pathfindToPoseFlipped(FieldConstants.kRightStation, kDefaultConstraints));
+
+    controller1
+        .button(kBackButton)
+        .onTrue(AutoBuilder.pathfindToPoseFlipped(drive.getPose(), kDefaultConstraints));
   }
 
   /**

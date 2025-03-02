@@ -85,8 +85,10 @@ public class Branch {
   public Pose2d getBranchPose() {
     return branchPose.transformBy(
         new Transform2d(
-            Math.sin(branchPose.getRotation().getRadians()) * kIntakeCenterOffset,
-            Math.cos(branchPose.getRotation().getRadians()) * kIntakeCenterOffset,
+            Math.sin(branchPose.getRotation().getRadians()) * kIntakeCenterOffset
+                - Math.cos(branchPose.getRotation().getRadians()) * kReefOffset,
+            Math.cos(branchPose.getRotation().getRadians()) * kIntakeCenterOffset
+                - Math.sin(branchPose.getRotation().getRadians()) * kReefOffset,
             new Rotation2d()));
   }
 

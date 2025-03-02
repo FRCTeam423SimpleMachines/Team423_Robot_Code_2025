@@ -40,8 +40,8 @@ public class VisionConstants {
           new Rotation3d(0.0, 0.0, Math.PI / 4.0));
   public static Transform3d robotToCameraFrontRight =
       new Transform3d(
-          Units.inchesToMeters(11.5),
-          Units.inchesToMeters(-10.5),
+          Units.inchesToMeters(12.5),
+          Units.inchesToMeters(-11.5),
           Units.inchesToMeters(9.25),
           new Rotation3d(0.0, 0.0, -Math.PI / 4.0));
   public static Transform3d robotToCameraBackLeft =
@@ -52,8 +52,8 @@ public class VisionConstants {
           new Rotation3d(0.0, 0.0, 3.0 * Math.PI / 4.0));
   public static Transform3d robotToCameraBackRight =
       new Transform3d(
+          Units.inchesToMeters(-12.5),
           Units.inchesToMeters(-11.5),
-          Units.inchesToMeters(-10.5),
           Units.inchesToMeters(10),
           new Rotation3d(0.0, 0.0, -3.0 * Math.PI / 4.0));
 

@@ -29,7 +29,7 @@ public class PivotIOSpark implements PivotIO {
 
   @Override
   public void updateInputs(PivotIOInputs inputs) {
-    ifOk(m_pivotMotor, m_pivotEconder::getPosition, (value) -> inputs.position = value * 360);
+    ifOk(m_pivotMotor, this::getPositionDegrees, (value) -> inputs.position = value);
     ifOk(m_pivotMotor, m_pivotMotor::getOutputCurrent, (value) -> inputs.current = value);
     ifOk(m_pivotMotor, m_pivotMotor::getBusVoltage, (value) -> inputs.voltage = value);
   }
