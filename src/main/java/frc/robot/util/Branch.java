@@ -4,8 +4,6 @@ import static frc.robot.Constants.IntakeConstants.kIntakeCenterOffset;
 import static frc.robot.subsystems.vision.VisionConstants.aprilTagLayout;
 import static frc.robot.util.FieldConstants.*;
 
-import edu.wpi.first.apriltag.AprilTag;
-import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
@@ -86,9 +84,9 @@ public class Branch {
         break;
     }
 
-    if(DriverStation.getAlliance().get().equals(Alliance.Red)){
-      branchID-=11;
-      stationID-=11;
+    if (DriverStation.getAlliance().get().equals(Alliance.Red)) {
+      branchID -= 11;
+      stationID -= 11;
     }
   }
 
@@ -103,9 +101,9 @@ public class Branch {
       case "H":
       case "G":
         stationID = 12;
-        if(DriverStation.getAlliance().get().equals(Alliance.Red)){
-          branchID-=11;
-          stationID-=11;
+        if (DriverStation.getAlliance().get().equals(Alliance.Red)) {
+          branchID -= 11;
+          stationID -= 11;
         }
         break;
     }
@@ -117,10 +115,12 @@ public class Branch {
 
     return shiftedPose.transformBy(
         new Transform2d(
-            Math.sin(shiftedPose.getRotation().getRadians()) * (kIntakeCenterOffset+branchOffset)
-                + Math.cos(shiftedPose.getRotation().getRadians()) * kReefOffset+0.5*DriveConstants.kDriveBaseWidth,
-            Math.cos(shiftedPose.getRotation().getRadians()) * (kIntakeCenterOffset+branchOffset)
-                + Math.sin(shiftedPose.getRotation().getRadians()) * kReefOffset+0.5*DriveConstants.kDriveBaseWidth,
+            Math.sin(shiftedPose.getRotation().getRadians()) * (kIntakeCenterOffset + branchOffset)
+                + Math.cos(shiftedPose.getRotation().getRadians()) * kReefOffset
+                + 0.5 * DriveConstants.kDriveBaseWidth,
+            Math.cos(shiftedPose.getRotation().getRadians()) * (kIntakeCenterOffset + branchOffset)
+                + Math.sin(shiftedPose.getRotation().getRadians()) * kReefOffset
+                + 0.5 * DriveConstants.kDriveBaseWidth,
             new Rotation2d()));
   }
 
@@ -130,9 +130,11 @@ public class Branch {
     return shiftedPose.transformBy(
         new Transform2d(
             Math.sin(shiftedPose.getRotation().getRadians()) * (kIntakeCenterOffset)
-                + Math.cos(shiftedPose.getRotation().getRadians()) * kStationOffset+0.5*DriveConstants.kDriveBaseWidth,
+                + Math.cos(shiftedPose.getRotation().getRadians()) * kStationOffset
+                + 0.5 * DriveConstants.kDriveBaseWidth,
             Math.cos(shiftedPose.getRotation().getRadians()) * (kIntakeCenterOffset)
-                + Math.sin(shiftedPose.getRotation().getRadians()) * kStationOffset+0.5*DriveConstants.kDriveBaseWidth,
+                + Math.sin(shiftedPose.getRotation().getRadians()) * kStationOffset
+                + 0.5 * DriveConstants.kDriveBaseWidth,
             new Rotation2d()));
   }
 }

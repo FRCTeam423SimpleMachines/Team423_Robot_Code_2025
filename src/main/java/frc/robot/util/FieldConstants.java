@@ -1,13 +1,14 @@
 package frc.robot.util;
 
+import edu.wpi.first.apriltag.AprilTagFieldLayout;
+import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.apriltag.AprilTagFieldLayout;
-import edu.wpi.first.apriltag.AprilTagFields;
 
 public class FieldConstants {
-  public AprilTagFieldLayout fieldlayout = AprilTagFieldLayout.loadField(AprilTagFields.k2025ReefscapeWelded);
+  public AprilTagFieldLayout fieldlayout =
+      AprilTagFieldLayout.loadField(AprilTagFields.k2025ReefscapeWelded);
   // Poses for each branch of the reef
   public static final Pose2d kBranchA =
       new Pose2d(3.266, 4.187, new Rotation2d(Units.degreesToRadians(180.0)));
