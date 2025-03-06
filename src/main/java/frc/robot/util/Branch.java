@@ -130,9 +130,9 @@ public class Branch {
     return shiftedPose.transformBy(
         new Transform2d(
             Math.sin(shiftedPose.getRotation().getRadians()) * (kIntakeCenterOffset)
-                + Math.cos(shiftedPose.getRotation().getRadians()) * kReefOffset,
+                + Math.cos(shiftedPose.getRotation().getRadians()) * kStationOffset+0.5*DriveConstants.kDriveBaseWidth,
             Math.cos(shiftedPose.getRotation().getRadians()) * (kIntakeCenterOffset)
-                + Math.sin(shiftedPose.getRotation().getRadians()) * kReefOffset,
+                + Math.sin(shiftedPose.getRotation().getRadians()) * kStationOffset+0.5*DriveConstants.kDriveBaseWidth,
             new Rotation2d()));
   }
 }
