@@ -36,7 +36,7 @@ public class ElevatorIOSim implements ElevatorIO {
 
     inputs.firstStagePosition = m_firstStageMotor.getAngularPositionRotations();
     inputs.secondStagePosition = m_secondStageMotor.getAngularPositionRotations();
-    inputs.firstStageVelocity = m_firstStageMotor.getAngularVelocityRPM();
-    inputs.secondStageVelocity = m_secondStageMotor.getAngularVelocityRPM();
+    inputs.firstStageRPM = m_firstStageMotor.getAngularVelocityRPM();
+    inputs.secondStageRPM = m_secondStageMotor.getAngularVelocityRPM();
   }
 }

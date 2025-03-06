@@ -24,8 +24,8 @@ import edu.wpi.first.math.util.Units;
 public class DriveConstants {
   public static final double maxSpeedMetersPerSec = 4.4;
   public static final double odometryFrequency = 100.0; // Hz
-  public static final double kDriveBaseWidth = 24; // inches
-  public static final double kDriveBaseLength = 24; // inches
+  public static final double kDriveBaseWidth = 26; // inches
+  public static final double kDriveBaseLength = 26; // inches
   public static final double kDistToWheelCenters = 1.5; // inches
 
   // Chassis configuration

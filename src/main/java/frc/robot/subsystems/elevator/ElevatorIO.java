@@ -7,8 +7,8 @@ public interface ElevatorIO {
   public static class ElevatorIOInputs {
     public double firstStagePosition = 0.0;
     public double secondStagePosition = 0.0;
-    public double firstStageVelocity = 0.0;
-    public double secondStageVelocity = 0.0;
+    public double firstStageRPM = 0.0;
+    public double secondStageRPM = 0.0;
     public double firstPotPos = 0.0;
     public double secondPotPos = 0.0;
     public double firstVoltage = 0.0;

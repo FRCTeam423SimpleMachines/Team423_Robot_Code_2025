@@ -3,15 +3,18 @@ package frc.robot.util;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.apriltag.AprilTagFieldLayout;
+import edu.wpi.first.apriltag.AprilTagFields;
 
 public class FieldConstants {
+  public AprilTagFieldLayout fieldlayout = AprilTagFieldLayout.loadField(AprilTagFields.k2025ReefscapeWelded);
   // Poses for each branch of the reef
   public static final Pose2d kBranchA =
       new Pose2d(3.266, 4.187, new Rotation2d(Units.degreesToRadians(180.0)));
   public static final Pose2d kBranchB =
       new Pose2d(3.266, 3.860, new Rotation2d(Units.degreesToRadians(180.0)));
   public static final Pose2d kBranchC =
-      new Pose2d(3.725, 3.040, new Rotation2d(Units.degreesToRadians(-1200.0)));
+      new Pose2d(3.725, 3.040, new Rotation2d(Units.degreesToRadians(-120.0)));
   public static final Pose2d kBranchD =
       new Pose2d(4.007, 2.894, new Rotation2d(Units.degreesToRadians(-120.0)));
   public static final Pose2d kBranchE =
@@ -37,5 +40,7 @@ public class FieldConstants {
   public static final Pose2d kRightStation =
       new Pose2d(1.103, 1.003, new Rotation2d(Units.degreesToRadians(-55.0)));
 
-  public static final double kReefOffset = Units.inchesToMeters(-5);
+  public static final double kBranchOffset = Units.inchesToMeters(6.5);
+  public static final double kReefOffset = Units.inchesToMeters(5);
+  public static final double kStationOffset = Units.inchesToMeters(0);
 }

@@ -1,69 +1,94 @@
 package frc.robot.util;
 
 import static frc.robot.Constants.IntakeConstants.kIntakeCenterOffset;
+import static frc.robot.subsystems.vision.VisionConstants.aprilTagLayout;
 import static frc.robot.util.FieldConstants.*;
 
+import edu.wpi.first.apriltag.AprilTag;
+import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import frc.robot.subsystems.drive.DriveConstants;
 
 public class Branch {
 
   private final String letter;
-  private Pose2d branchPose;
-  private Pose2d stationPose;
+  private String station = "Left";
+  private int stationID;
+  private int branchID;
+  private double branchOffset;
 
   public Branch(String branchLetter) {
     letter = branchLetter.toUpperCase();
     switch (letter) {
       case "A":
-        branchPose = kBranchA;
-        stationPose = kLeftStation;
+        branchID = 18;
+        stationID = 13;
+        branchOffset = -kBranchOffset;
         break;
       case "B":
-        branchPose = kBranchB;
-        stationPose = kLeftStation;
+        branchID = 18;
+        stationID = 13;
+        branchOffset = kBranchOffset;
         break;
       case "C":
-        branchPose = kBranchC;
-        stationPose = kRightStation;
+        branchID = 17;
+        stationID = 12;
+        branchOffset = -kBranchOffset;
         break;
       case "D":
-        branchPose = kBranchD;
-        stationPose = kRightStation;
+        branchID = 17;
+        stationID = 12;
+        branchOffset = kBranchOffset;
         break;
       case "E":
-        branchPose = kBranchE;
-        stationPose = kRightStation;
+        branchID = 22;
+        stationID = 12;
+        branchOffset = -kBranchOffset;
         break;
       case "F":
-        branchPose = kBranchF;
-        stationPose = kRightStation;
+        branchID = 22;
+        stationID = 12;
+        branchOffset = kBranchOffset;
         break;
       case "G":
-        branchPose = kBranchG;
-        stationPose = kLeftStation;
+        branchID = 21;
+        stationID = 13;
+        branchOffset = -kBranchOffset;
         break;
       case "H":
-        branchPose = kBranchH;
-        stationPose = kLeftStation;
+        branchID = 21;
+        stationID = 13;
+        branchOffset = kBranchOffset;
         break;
       case "I":
-        branchPose = kBranchI;
-        stationPose = kLeftStation;
+        branchID = 20;
+        stationID = 13;
+        branchOffset = -kBranchOffset;
         break;
       case "J":
-        branchPose = kBranchJ;
-        stationPose = kLeftStation;
+        branchID = 20;
+        stationID = 13;
+        branchOffset = kBranchOffset;
         break;
       case "K":
-        branchPose = kBranchK;
-        stationPose = kLeftStation;
+        branchID = 19;
+        stationID = 13;
+        branchOffset = -kBranchOffset;
         break;
       case "L":
-        branchPose = kBranchL;
-        stationPose = kLeftStation;
+        branchID = 19;
+        stationID = 13;
+        branchOffset = kBranchOffset;
         break;
+    }
+
+    if(DriverStation.getAlliance().get().equals(Alliance.Red)){
+      branchID-=11;
+      stationID-=11;
     }
   }
 
@@ -77,22 +102,37 @@ public class Branch {
       case "B":
       case "H":
       case "G":
-        stationPose = kRightStation;
+        stationID = 12;
+        if(DriverStation.getAlliance().get().equals(Alliance.Red)){
+          branchID-=11;
+          stationID-=11;
+        }
         break;
     }
   }
 
   public Pose2d getBranchPose() {
-    return branchPose.transformBy(
+
+    Pose2d shiftedPose = aprilTagLayout.getTagPose(branchID).get().toPose2d();
+
+    return shiftedPose.transformBy(
         new Transform2d(
-            Math.sin(branchPose.getRotation().getRadians()) * kIntakeCenterOffset
-                - Math.cos(branchPose.getRotation().getRadians()) * kReefOffset,
-            Math.cos(branchPose.getRotation().getRadians()) * kIntakeCenterOffset
-                - Math.sin(branchPose.getRotation().getRadians()) * kReefOffset,
+            Math.sin(shiftedPose.getRotation().getRadians()) * (kIntakeCenterOffset+branchOffset)
+                + Math.cos(shiftedPose.getRotation().getRadians()) * kReefOffset+0.5*DriveConstants.kDriveBaseWidth,
+            Math.cos(shiftedPose.getRotation().getRadians()) * (kIntakeCenterOffset+branchOffset)
+                + Math.sin(shiftedPose.getRotation().getRadians()) * kReefOffset+0.5*DriveConstants.kDriveBaseWidth,
             new Rotation2d()));
   }
 
   public Pose2d getStationPose() {
-    return stationPose;
+    Pose2d shiftedPose = aprilTagLayout.getTagPose(stationID).get().toPose2d();
+
+    return shiftedPose.transformBy(
+        new Transform2d(
+            Math.sin(shiftedPose.getRotation().getRadians()) * (kIntakeCenterOffset)
+                + Math.cos(shiftedPose.getRotation().getRadians()) * kReefOffset,
+            Math.cos(shiftedPose.getRotation().getRadians()) * (kIntakeCenterOffset)
+                + Math.sin(shiftedPose.getRotation().getRadians()) * kReefOffset,
+            new Rotation2d()));
   }
 }

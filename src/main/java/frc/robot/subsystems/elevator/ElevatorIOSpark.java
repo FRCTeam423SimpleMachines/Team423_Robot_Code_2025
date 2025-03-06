@@ -73,11 +73,11 @@ public class ElevatorIOSpark implements ElevatorIO {
     ifOk(
         m_firstStageMotor,
         m_firstStageEncoder::getVelocity,
-        (value) -> inputs.firstStageVelocity = value);
+        (value) -> inputs.firstStageRPM = value);
     ifOk(
         m_secondStageMotor,
         m_secondStageEncoder::getVelocity,
-        (value) -> inputs.secondStageVelocity = value);
+        (value) -> inputs.secondStageRPM = value);
     ifOk(
         m_firstStageMotor,
         m_firstStageMotor::getBusVoltage,
