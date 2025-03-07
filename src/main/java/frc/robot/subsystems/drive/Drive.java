@@ -126,6 +126,9 @@ public class Drive extends SubsystemBase {
   @Override
   public void periodic() {
     odometryLock.lock(); // Prevents odometry updates while reading data
+    if (getCurrentCommand() != null) {
+      gyroInputs.currentCommand = getCurrentCommand().getName();
+    }
     gyroIO.updateInputs(gyroInputs);
     Logger.processInputs("Drive/Gyro", gyroInputs);
     for (var module : modules) {

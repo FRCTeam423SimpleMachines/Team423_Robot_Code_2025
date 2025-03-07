@@ -13,6 +13,8 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.RobotBase;
 
@@ -58,6 +60,21 @@ public final class Constants {
 
     public static final int kControllerPort1 = 0;
     public static final int kControllerPort2 = 1;
+
+    public static final int kXAxis = 0;
+    public static final int kYAxis = 1;
+
+    public static final int kTrigger = 1;
+    public static final int kDownButton = 2;
+    public static final int kMidButton = 3;
+    public static final int kLeftButton = 4;
+    public static final int kRightButton = 5;
+    public static final int kFrontLeftButton = 6;
+    public static final int kMidLeftButton = 7;
+    public static final int kBackLeftButton = 8;
+    public static final int kBackRightButton = 9;
+    public static final int kMidRightButton = 10;
+    public static final int kFrontRightButton = 11;
   }
 
   public static class ElevatorConstants {
@@ -74,6 +91,8 @@ public final class Constants {
     public static final double secondUpperBound = 23.6;
     public static final double secondLowerBound = 0.1;
     public static final double elevatorOffset = 28;
+    public static final TrapezoidProfile kFirstProfile =
+        new TrapezoidProfile(new Constraints(0.0, 0.0));
   }
 
   public static class IntakeConstants {

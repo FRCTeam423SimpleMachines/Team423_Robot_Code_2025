@@ -83,6 +83,8 @@ public class RobotContainer {
   // Controller
   private final CommandJoystick controller1 = new CommandJoystick(0);
   private final CommandJoystick controller2 = new CommandJoystick(1);
+  private final CommandJoystick stick1 = new CommandJoystick(2);
+  private final CommandJoystick stick2 = new CommandJoystick(3);
 
   // Dashboard inputs
   private final LoggedDashboardChooser<Command> autoChooser;
@@ -239,9 +241,9 @@ public class RobotContainer {
     drive.setDefaultCommand(
         DriveCommands.joystickDrive(
             drive,
-            () -> -controller1.getRawAxis(kLeftYAxis),
-            () -> -controller1.getRawAxis(kLeftXAxis),
-            () -> -controller1.getRawAxis(kRightXAxis)));
+            () -> -stick1.getRawAxis(kYAxis),
+            () -> -stick1.getRawAxis(kXAxis),
+            () -> -stick2.getRawAxis(kXAxis)));
 
     elevator.setDefaultCommand(new RunCommand(() -> elevator.runBoth(0.0, 0.0), elevator));
 
@@ -288,33 +290,37 @@ public class RobotContainer {
                 () -> -controller1.getRawAxis(kLeftXAxis),
                 () -> 0.0));
 
-    controller2
-        .axisGreaterThan(kLeftTrigger, 0.75)
+    stick1
+        .button(kFrontLeftButton)
         .whileTrue(
             new RunCommand(
                 () ->
                     elevator.runBoth(
-                        MathUtil.applyDeadband(-controller2.getRawAxis(kRightYAxis), 0.06),
-                        MathUtil.applyDeadband(-controller2.getRawAxis(kLeftYAxis), 0.06)),
+                        MathUtil.applyDeadband(-stick1.getRawAxis(kYAxis), 0.06),
+                        MathUtil.applyDeadband(-stick2.getRawAxis(kYAxis), 0.06)),
                 elevator));
 
-    controller2.button(kRightBumper).onTrue(new RunIntakeIn(intake, -0.7));
+    stick1.button(kDownButton).onTrue(new RunIntakeIn(intake, -0.7));
 
-    controller2.button(kLeftBumper).whileTrue(new RunCommand(() -> intake.setSpeed(1.0), intake));
+    stick1.button(kMidButton).whileTrue(new RunCommand(() -> intake.setSpeed(1.0), intake));
 
-    controller2
-        .button(kAButton)
+    stick2
+        .button(kBackLeftButton)
         .onTrue(new ElevatorPivotCommand(elevator, pivot, 28.0, 30)); // Station
 
-    controller2.button(kBButton).onTrue(new ElevatorPivotCommand(elevator, pivot, 53.0, 340)); // L3
+    stick2
+        .button(kBackRightButton)
+        .onTrue(new ElevatorPivotCommand(elevator, pivot, 53.0, 340)); // L3
 
     controller2.button(kXButton).onTrue(new ElevatorPivotCommand(elevator, pivot, 28.0, 90.0));
 
-    controller2.button(kYButton).onTrue(new ElevatorPivotCommand(elevator, pivot, 77.0, 340)); // L4
+    stick2
+        .button(kFrontRightButton)
+        .onTrue(new ElevatorPivotCommand(elevator, pivot, 77.0, 340)); // L4
 
-    controller2.povUp().whileTrue(new RunCommand(() -> pivot.runPow(0.3), intake));
+    stick1.button(kFrontRightButton).whileTrue(new RunCommand(() -> pivot.runPow(0.3), intake));
 
-    controller2.povDown().whileTrue(new RunCommand(() -> pivot.runPow(-0.3), intake));
+    stick1.button(kMidRightButton).whileTrue(new RunCommand(() -> pivot.runPow(-0.3), intake));
 
     // controller2.button(kAButton).onTrue(new RunElevatorPos(elevator, 48.0));
 
@@ -322,82 +328,87 @@ public class RobotContainer {
 
     // controller2.button(kAButton).whileTrue(new RunCommand(() -> lift.run(-0.3), lift));
 
-    if (controller1.button(kYButton).getAsBoolean()) {
-      controller1
-          .povUp()
-          .onTrue(
-              AutoBuilder.pathfindToPoseFlipped(
-                  new Branch("G").getBranchPose(), kDefaultConstraints));
-      controller1
-          .povDown()
-          .onTrue(
-              AutoBuilder.pathfindToPoseFlipped(
-                  new Branch("A").getBranchPose(), kDefaultConstraints));
-      controller1
-          .povUpRight()
-          .onTrue(
-              AutoBuilder.pathfindToPoseFlipped(
-                  new Branch("E").getBranchPose(), kDefaultConstraints));
-      controller1
-          .povUpLeft()
-          .onTrue(
-              AutoBuilder.pathfindToPoseFlipped(
-                  new Branch("I").getBranchPose(), kDefaultConstraints));
-      controller1
-          .povDownRight()
-          .onTrue(
-              AutoBuilder.pathfindToPoseFlipped(
-                  new Branch("C").getBranchPose(), kDefaultConstraints));
-      controller1
-          .povDownLeft()
-          .onTrue(
-              AutoBuilder.pathfindToPoseFlipped(
-                  new Branch("K").getBranchPose(), kDefaultConstraints));
-    } else {
-      controller1
-          .povUp()
+    if (stick1.button(kTrigger).getAsBoolean() && stick2.button(kTrigger).getAsBoolean()) {
+      stick2
+          .button(kDownButton)
           .onTrue(
               AutoBuilder.pathfindToPoseFlipped(
                   new Branch("H").getBranchPose(), kDefaultConstraints));
-      controller1
-          .povDown()
-          .onTrue(
-              AutoBuilder.pathfindToPoseFlipped(
-                  new Branch("B").getBranchPose(), kDefaultConstraints));
-      controller1
-          .povUpRight()
-          .onTrue(
-              AutoBuilder.pathfindToPoseFlipped(
-                  new Branch("F").getBranchPose(), kDefaultConstraints));
-      controller1
-          .povUpLeft()
+      stick2
+          .button(kLeftButton)
           .onTrue(
               AutoBuilder.pathfindToPoseFlipped(
                   new Branch("J").getBranchPose(), kDefaultConstraints));
-      controller1
-          .povDownRight()
+      stick2
+          .button(kRightButton)
           .onTrue(
               AutoBuilder.pathfindToPoseFlipped(
-                  new Branch("D").getBranchPose(), kDefaultConstraints));
-      controller1
-          .povDownLeft()
+                  new Branch("F").getBranchPose(), kDefaultConstraints));
+    } else if (stick1.button(kTrigger).getAsBoolean()) {
+      stick2
+          .button(kDownButton)
+          .onTrue(
+              AutoBuilder.pathfindToPoseFlipped(
+                  new Branch("A").getBranchPose(), kDefaultConstraints));
+      stick2
+          .button(kLeftButton)
+          .onTrue(
+              AutoBuilder.pathfindToPoseFlipped(
+                  new Branch("K").getBranchPose(), kDefaultConstraints));
+      stick2
+          .button(kRightButton)
+          .onTrue(
+              AutoBuilder.pathfindToPoseFlipped(
+                  new Branch("C").getBranchPose(), kDefaultConstraints));
+    } else if (stick2.button(kTrigger).getAsBoolean()) {
+      stick2
+          .button(kDownButton)
+          .onTrue(
+              AutoBuilder.pathfindToPoseFlipped(
+                  new Branch("G").getBranchPose(), kDefaultConstraints));
+      stick2
+          .button(kLeftButton)
+          .onTrue(
+              AutoBuilder.pathfindToPoseFlipped(
+                  new Branch("I").getBranchPose(), kDefaultConstraints));
+      stick2
+          .button(kRightButton)
+          .onTrue(
+              AutoBuilder.pathfindToPoseFlipped(
+                  new Branch("E").getBranchPose(), kDefaultConstraints));
+    } else {
+      stick2
+          .button(kDownButton)
+          .onTrue(
+              AutoBuilder.pathfindToPoseFlipped(
+                  new Branch("B").getBranchPose(), kDefaultConstraints));
+      stick2
+          .button(kLeftButton)
           .onTrue(
               AutoBuilder.pathfindToPoseFlipped(
                   new Branch("L").getBranchPose(), kDefaultConstraints));
+      stick2
+          .button(kRightButton)
+          .onTrue(
+              AutoBuilder.pathfindToPoseFlipped(
+                  new Branch("D").getBranchPose(), kDefaultConstraints));
     }
 
-    controller1
-        .povLeft()
-        .onTrue(
-            AutoBuilder.pathfindToPoseFlipped(FieldConstants.kLeftStation, kDefaultConstraints));
-    controller1
-        .povRight()
-        .onTrue(
-            AutoBuilder.pathfindToPoseFlipped(FieldConstants.kRightStation, kDefaultConstraints));
+    if (stick1.button(kTrigger).getAsBoolean()) {
+      stick2
+          .button(kMidButton)
+          .onTrue(
+              AutoBuilder.pathfindToPoseFlipped(FieldConstants.kLeftStation, kDefaultConstraints));
+    } else {
+      stick2
+          .button(kMidButton)
+          .onTrue(
+              AutoBuilder.pathfindToPoseFlipped(FieldConstants.kRightStation, kDefaultConstraints));
+    }
 
-    controller1
-        .button(kBackButton)
-        .onTrue(AutoBuilder.pathfindToPoseFlipped(drive.getPose(), kDefaultConstraints));
+    stick1
+        .button(kMidButton)
+        .onTrue(DriveCommands.joystickDrive(drive, () -> 0.0, () -> 0.0, () -> 0.0));
   }
 
   /**

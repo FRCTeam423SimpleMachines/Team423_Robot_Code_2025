@@ -42,6 +42,7 @@ public class Elevator extends SubsystemBase {
     if ((getSecondPos() <= secondLowerBound) && (speed < 0)) {
       speed = 0;
     }
+
     io.setSecondSpeed(speed);
   }
 
