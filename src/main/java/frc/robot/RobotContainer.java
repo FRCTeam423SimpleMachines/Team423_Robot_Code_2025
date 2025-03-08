@@ -60,7 +60,6 @@ import frc.robot.subsystems.vision.VisionIO;
 import frc.robot.subsystems.vision.VisionIOPhotonVision;
 import frc.robot.subsystems.vision.VisionIOPhotonVisionSim;
 import frc.robot.util.Branch;
-import frc.robot.util.FieldConstants;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
 /**
@@ -238,9 +237,9 @@ public class RobotContainer {
     drive.setDefaultCommand(
         DriveCommands.joystickDrive(
             drive,
-            () -> -stick1.getRawAxis(kYAxis),
-            () -> -stick1.getRawAxis(kXAxis),
-            () -> -stick2.getRawAxis(kXAxis)));
+            () -> MathUtil.applyDeadband(-stick1.getRawAxis(kYAxis), 0.06),
+            () -> MathUtil.applyDeadband(-stick1.getRawAxis(kXAxis), 0.06),
+            () -> MathUtil.applyDeadband(-stick2.getRawAxis(kXAxis), 0.06)));
 
     // drive.setDefaultCommand(
     //     DriveCommands.joystickDrive(
@@ -272,7 +271,7 @@ public class RobotContainer {
                 () -> new Rotation2d()));
 
     // Switch to X pattern when X button is pressed
-    controller1.button(kXButton).onTrue(Commands.runOnce(drive::stopWithX, drive));
+    stick1.button(kMidButton).onTrue(Commands.runOnce(drive::stopWithX, drive));
 
     // Reset gyro to 0° when B button is pressed
     controller1
@@ -370,87 +369,114 @@ public class RobotContainer {
 
     // controller2.button(kAButton).whileTrue(new RunCommand(() -> lift.run(-0.3), lift));
 
-    if (stick1.button(kTrigger).getAsBoolean() && stick2.button(kTrigger).getAsBoolean()) {
-      stick2
-          .button(kDownButton)
-          .onTrue(
-              AutoBuilder.pathfindToPoseFlipped(
-                  new Branch("H").getBranchPose(), kDefaultConstraints));
-      stick2
-          .button(kLeftButton)
-          .onTrue(
-              AutoBuilder.pathfindToPoseFlipped(
-                  new Branch("J").getBranchPose(), kDefaultConstraints));
-      stick2
-          .button(kRightButton)
-          .onTrue(
-              AutoBuilder.pathfindToPoseFlipped(
-                  new Branch("F").getBranchPose(), kDefaultConstraints));
-    } else if (stick1.button(kTrigger).getAsBoolean()) {
-      stick2
-          .button(kDownButton)
-          .onTrue(
-              AutoBuilder.pathfindToPoseFlipped(
-                  new Branch("A").getBranchPose(), kDefaultConstraints));
-      stick2
-          .button(kLeftButton)
-          .onTrue(
-              AutoBuilder.pathfindToPoseFlipped(
-                  new Branch("K").getBranchPose(), kDefaultConstraints));
-      stick2
-          .button(kRightButton)
-          .onTrue(
-              AutoBuilder.pathfindToPoseFlipped(
-                  new Branch("C").getBranchPose(), kDefaultConstraints));
-    } else if (stick2.button(kTrigger).getAsBoolean()) {
-      stick2
-          .button(kDownButton)
-          .onTrue(
-              AutoBuilder.pathfindToPoseFlipped(
-                  new Branch("G").getBranchPose(), kDefaultConstraints));
-      stick2
-          .button(kLeftButton)
-          .onTrue(
-              AutoBuilder.pathfindToPoseFlipped(
-                  new Branch("I").getBranchPose(), kDefaultConstraints));
-      stick2
-          .button(kRightButton)
-          .onTrue(
-              AutoBuilder.pathfindToPoseFlipped(
-                  new Branch("E").getBranchPose(), kDefaultConstraints));
-    } else {
-      stick2
-          .button(kDownButton)
-          .onTrue(
-              AutoBuilder.pathfindToPoseFlipped(
-                  new Branch("B").getBranchPose(), kDefaultConstraints));
-      stick2
-          .button(kLeftButton)
-          .onTrue(
-              AutoBuilder.pathfindToPoseFlipped(
-                  new Branch("L").getBranchPose(), kDefaultConstraints));
-      stick2
-          .button(kRightButton)
-          .onTrue(
-              AutoBuilder.pathfindToPoseFlipped(
-                  new Branch("D").getBranchPose(), kDefaultConstraints));
-    }
-
-    if (stick1.button(kTrigger).getAsBoolean()) {
-      stick2
-          .button(kMidButton)
-          .onTrue(
-              AutoBuilder.pathfindToPoseFlipped(FieldConstants.kLeftStation, kDefaultConstraints));
-    } else {
-      stick2
-          .button(kMidButton)
-          .onTrue(
-              AutoBuilder.pathfindToPoseFlipped(FieldConstants.kRightStation, kDefaultConstraints));
-    }
-
+    // // left held
+    stick2
+        .button(kDownButton)
+        .and(stick2.button(kTrigger))
+        .and(stick1.button(kTrigger))
+        .onTrue(
+            AutoBuilder.pathfindToPoseFlipped(
+                new Branch("A").getBranchPose(), kDefaultConstraints));
+    stick2
+        .button(kLeftButton)
+        .and(stick2.button(kTrigger))
+        .and(stick1.button(kTrigger))
+        .onTrue(
+            AutoBuilder.pathfindToPoseFlipped(
+                new Branch("K").getBranchPose(), kDefaultConstraints));
+    stick2
+        .button(kRightButton)
+        .and(stick2.button(kTrigger))
+        .and(stick1.button(kTrigger))
+        .onTrue(
+            AutoBuilder.pathfindToPoseFlipped(
+                new Branch("C").getBranchPose(), kDefaultConstraints));
     stick1
+        .button(kDownButton)
+        .and(stick2.button(kTrigger))
+        .and(stick1.button(kTrigger))
+        .onTrue(
+            AutoBuilder.pathfindToPoseFlipped(
+                new Branch("H").getBranchPose(), kDefaultConstraints));
+    stick1
+        .button(kLeftButton)
+        .and(stick2.button(kTrigger))
+        .and(stick1.button(kTrigger))
+        .onTrue(
+            AutoBuilder.pathfindToPoseFlipped(
+                new Branch("J").getBranchPose(), kDefaultConstraints));
+    stick1
+        .button(kRightButton)
+        .and(stick2.button(kTrigger))
+        .and(stick1.button(kTrigger))
+        .onTrue(
+            AutoBuilder.pathfindToPoseFlipped(
+                new Branch("F").getBranchPose(), kDefaultConstraints));
+
+    // // no left held
+    stick2
+        .button(kDownButton)
+        .and(stick2.button(kTrigger))
+        .and(stick1.button(kTrigger).negate())
+        .onTrue(
+            AutoBuilder.pathfindToPoseFlipped(
+                new Branch("B").getBranchPose(), kDefaultConstraints));
+    stick2
+        .button(kLeftButton)
+        .and(stick2.button(kTrigger))
+        .and(stick1.button(kTrigger).negate())
+        .onTrue(
+            AutoBuilder.pathfindToPoseFlipped(
+                new Branch("L").getBranchPose(), kDefaultConstraints));
+    stick2
+        .button(kRightButton)
+        .and(stick2.button(kTrigger))
+        .and(stick1.button(kTrigger).negate())
+        .onTrue(
+            AutoBuilder.pathfindToPoseFlipped(
+                new Branch("D").getBranchPose(), kDefaultConstraints));
+    stick1
+        .button(kDownButton)
+        .and(stick2.button(kTrigger))
+        .and(stick1.button(kTrigger).negate())
+        .onTrue(
+            AutoBuilder.pathfindToPoseFlipped(
+                new Branch("G").getBranchPose(), kDefaultConstraints));
+    stick1
+        .button(kLeftButton)
+        .and(stick2.button(kTrigger))
+        .and(stick1.button(kTrigger).negate())
+        .onTrue(
+            AutoBuilder.pathfindToPoseFlipped(
+                new Branch("I").getBranchPose(), kDefaultConstraints));
+    stick1
+        .button(kRightButton)
+        .and(stick2.button(kTrigger))
+        .and(stick1.button(kTrigger).negate())
+        .onTrue(
+            AutoBuilder.pathfindToPoseFlipped(
+                new Branch("E").getBranchPose(), kDefaultConstraints));
+
+    stick2
         .button(kMidButton)
-        .onTrue(DriveCommands.joystickDrive(drive, () -> 0.0, () -> 0.0, () -> 0.0));
+        .and(stick2.button(kTrigger))
+        .and(stick1.button(kTrigger))
+        .onTrue(
+            AutoBuilder.pathfindToPoseFlipped(
+                new Branch("L").getStationPose(), kDefaultConstraints));
+
+    stick2
+        .button(kMidButton)
+        .and(stick2.button(kTrigger))
+        .and(stick1.button(kTrigger).negate())
+        .onTrue(
+            AutoBuilder.pathfindToPoseFlipped(
+                new Branch("D").getStationPose(), kDefaultConstraints));
+
+    /*Should be breakout button; does not work */
+    stick1
+        .button(kBackLeftButton)
+        .whileTrue(DriveCommands.joystickDrive(drive, () -> 0.0, () -> 0.0, () -> 0.0));
   }
 
   /**
