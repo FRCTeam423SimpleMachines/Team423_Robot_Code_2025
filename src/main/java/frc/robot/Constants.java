@@ -98,7 +98,7 @@ public final class Constants {
   public static class IntakeConstants {
     public static final int kIntakeCANID = 24;
     public static final int kOpticChannel = 0;
-    public static final double kIntakeCenterOffset = Units.inchesToMeters(4.125);
+    public static final double kIntakeCenterOffset = Units.inchesToMeters(5);
   }
 
   public static class LiftConstants {

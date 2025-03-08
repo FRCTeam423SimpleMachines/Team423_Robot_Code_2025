@@ -1,6 +1,7 @@
 package frc.robot.util;
 
 import static frc.robot.Constants.IntakeConstants.kIntakeCenterOffset;
+import static frc.robot.subsystems.drive.DriveConstants.wheelBase;
 import static frc.robot.subsystems.vision.VisionConstants.aprilTagLayout;
 import static frc.robot.util.FieldConstants.*;
 
@@ -9,7 +10,6 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
-import frc.robot.subsystems.drive.DriveConstants;
 
 public class Branch {
 
@@ -115,26 +115,13 @@ public class Branch {
 
     return shiftedPose.transformBy(
         new Transform2d(
-            Math.sin(shiftedPose.getRotation().getRadians()) * (kIntakeCenterOffset + branchOffset)
-                + Math.cos(shiftedPose.getRotation().getRadians()) * kReefOffset
-                + 0.5 * DriveConstants.kDriveBaseWidth,
-            Math.cos(shiftedPose.getRotation().getRadians()) * (kIntakeCenterOffset + branchOffset)
-                + Math.sin(shiftedPose.getRotation().getRadians()) * kReefOffset
-                + 0.5 * DriveConstants.kDriveBaseWidth,
-            new Rotation2d()));
+            kReefOffset + 0.5 * wheelBase, kIntakeCenterOffset + branchOffset, new Rotation2d()));
   }
 
   public Pose2d getStationPose() {
     Pose2d shiftedPose = aprilTagLayout.getTagPose(stationID).get().toPose2d();
 
     return shiftedPose.transformBy(
-        new Transform2d(
-            Math.sin(shiftedPose.getRotation().getRadians()) * (kIntakeCenterOffset)
-                + Math.cos(shiftedPose.getRotation().getRadians()) * kStationOffset
-                + 0.5 * DriveConstants.kDriveBaseWidth,
-            Math.cos(shiftedPose.getRotation().getRadians()) * (kIntakeCenterOffset)
-                + Math.sin(shiftedPose.getRotation().getRadians()) * kStationOffset
-                + 0.5 * DriveConstants.kDriveBaseWidth,
-            new Rotation2d()));
+        new Transform2d(kStationOffset + 0.5 * wheelBase, kIntakeCenterOffset, new Rotation2d()));
   }
 }

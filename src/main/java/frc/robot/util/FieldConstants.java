@@ -42,6 +42,6 @@ public class FieldConstants {
       new Pose2d(1.103, 1.003, new Rotation2d(Units.degreesToRadians(-55.0)));
 
   public static final double kBranchOffset = Units.inchesToMeters(6.5);
-  public static final double kReefOffset = Units.inchesToMeters(5);
+  public static final double kReefOffset = Units.inchesToMeters(13);
   public static final double kStationOffset = Units.inchesToMeters(0);
 }

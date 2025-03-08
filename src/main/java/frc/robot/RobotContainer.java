@@ -23,7 +23,6 @@ import com.pathplanner.lib.auto.NamedCommands;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.RunCommand;
@@ -205,9 +204,7 @@ public class RobotContainer {
 
     autoChooser.addOption(
         "pathfinding test",
-        AutoBuilder.pathfindToPoseFlipped(
-            new Pose2d(2.817, 4.031, new Rotation2d(Units.degreesToRadians(-80.538))),
-            kDefaultConstraints));
+        AutoBuilder.pathfindToPoseFlipped(new Branch("H").getBranchPose(), kDefaultConstraints));
 
     // Set up SysId routines
     autoChooser.addOption(
@@ -347,6 +344,7 @@ public class RobotContainer {
         .onTrue(new ElevatorPivotCommand(elevator, pivot, 28.0, 30)); // Station
 
     controller2.button(kBButton).onTrue(new ElevatorPivotCommand(elevator, pivot, 53.0, 340)); // L3
+    // controller2.button(kBButton).onTrue(new RunElevatorPos(elevator, 53.0)); // L3
 
     controller2
         .button(kXButton)
