@@ -28,6 +28,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.commands.AutoScoring;
@@ -408,13 +409,29 @@ public class RobotContainer {
         .onTrue(
             AutoBuilder.pathfindToPoseFlipped(
                 new Branch("H").getBranchPose(), kDefaultConstraints));
-    stick1
-        .button(kLeftButton)
-        .and(stick2.button(kTrigger))
-        .and(stick1.button(kTrigger))
-        .onTrue(
-            AutoBuilder.pathfindToPoseFlipped(
-                new Branch("J").getBranchPose(), kDefaultConstraints));
+    // stick1
+    //     .button(kLeftButton)
+    //     .and(stick2.button(kTrigger))
+    //     .and(stick1.button(kTrigger))
+    //     .onTrue(
+    //         new SequentialCommandGroup(
+    //         AutoBuilder.pathfindToPoseFlipped(
+    //             new Branch("J").getBranchPose(), kDefaultConstraints)));
+
+    try {
+      stick1
+          .button(kLeftButton)
+          .and(stick2.button(kTrigger))
+          .and(stick1.button(kTrigger))
+          .onTrue(
+              new SequentialCommandGroup(
+                  AutoBuilder.pathfindThenFollowPath(
+                      PathPlannerPath.fromPathFile("J"), kDefaultConstraints)));
+    } catch (FileVersionException | IOException | ParseException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    }
+
     stick1
         .button(kRightButton)
         .and(stick2.button(kTrigger))
