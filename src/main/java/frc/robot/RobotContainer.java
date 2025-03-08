@@ -20,6 +20,8 @@ import static frc.robot.subsystems.vision.VisionConstants.*;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
+import com.pathplanner.lib.path.PathPlannerPath;
+import com.pathplanner.lib.util.FileVersionException;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -60,6 +62,8 @@ import frc.robot.subsystems.vision.VisionIO;
 import frc.robot.subsystems.vision.VisionIOPhotonVision;
 import frc.robot.subsystems.vision.VisionIOPhotonVisionSim;
 import frc.robot.util.Branch;
+import java.io.IOException;
+import org.json.simple.parser.ParseException;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
 /**
@@ -201,9 +205,15 @@ public class RobotContainer {
         new AutoScoring(
             drive, elevator, pivot, intake, stationChooser, branchChooser1, branchChooser2));
 
-    autoChooser.addOption(
-        "pathfinding test",
-        AutoBuilder.pathfindToPoseFlipped(new Branch("H").getBranchPose(), kDefaultConstraints));
+    try {
+      autoChooser.addOption(
+          "pathfinding test",
+          AutoBuilder.pathfindThenFollowPath(
+              PathPlannerPath.fromPathFile("Score G"), kDefaultConstraints));
+    } catch (FileVersionException | IOException | ParseException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    }
 
     // Set up SysId routines
     autoChooser.addOption(
