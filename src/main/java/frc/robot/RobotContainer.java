@@ -360,7 +360,7 @@ public class RobotContainer {
         .button(kXButton)
         .onTrue(new ElevatorPivotCommand(elevator, pivot, 28.0, 90.0)); // Reset
 
-    controller2.button(kYButton).onTrue(new ElevatorPivotCommand(elevator, pivot, 77.0, 340)); // L4
+    controller2.button(kYButton).onTrue(new ElevatorPivotCommand(elevator, pivot, 77.0, 335)); // L4
 
     controller2.povUp().whileTrue(new RunCommand(() -> pivot.runPow(0.3), intake));
 
