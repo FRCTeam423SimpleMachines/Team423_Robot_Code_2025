@@ -416,7 +416,7 @@ public class RobotContainer {
           .onTrue(
               new SequentialCommandGroup(
                   AutoBuilder.pathfindThenFollowPath(
-                      PathPlannerPath.fromPathFile("H"), kDefaultConstraints),
+                      PathPlannerPath.fromPathFile("G"), kDefaultConstraints),
                   new RunCommand(() -> drive.stopWithX(), drive)));
       // stick1
       //     .button(kLeftButton)
@@ -434,7 +434,7 @@ public class RobotContainer {
           .onTrue(
               new SequentialCommandGroup(
                   AutoBuilder.pathfindThenFollowPath(
-                      PathPlannerPath.fromPathFile("J"), kDefaultConstraints),
+                      PathPlannerPath.fromPathFile("I"), kDefaultConstraints),
                   new RunCommand(() -> drive.stopWithX(), drive)));
 
       stick1
@@ -444,7 +444,7 @@ public class RobotContainer {
           .onTrue(
               new SequentialCommandGroup(
                   AutoBuilder.pathfindThenFollowPath(
-                      PathPlannerPath.fromPathFile("F"), kDefaultConstraints),
+                      PathPlannerPath.fromPathFile("E"), kDefaultConstraints),
                   new RunCommand(() -> drive.stopWithX(), drive)));
 
       // // no left held
@@ -482,7 +482,7 @@ public class RobotContainer {
           .onTrue(
               new SequentialCommandGroup(
                   AutoBuilder.pathfindThenFollowPath(
-                      PathPlannerPath.fromPathFile("G"), kDefaultConstraints),
+                      PathPlannerPath.fromPathFile("H"), kDefaultConstraints),
                   new RunCommand(() -> drive.stopWithX(), drive)));
       stick1
           .button(kLeftButton)
@@ -491,7 +491,7 @@ public class RobotContainer {
           .onTrue(
               new SequentialCommandGroup(
                   AutoBuilder.pathfindThenFollowPath(
-                      PathPlannerPath.fromPathFile("I"), kDefaultConstraints),
+                      PathPlannerPath.fromPathFile("J"), kDefaultConstraints),
                   new RunCommand(() -> drive.stopWithX(), drive)));
       stick1
           .button(kRightButton)
@@ -500,7 +500,7 @@ public class RobotContainer {
           .onTrue(
               new SequentialCommandGroup(
                   AutoBuilder.pathfindThenFollowPath(
-                      PathPlannerPath.fromPathFile("E"), kDefaultConstraints),
+                      PathPlannerPath.fromPathFile("F"), kDefaultConstraints),
                   new RunCommand(() -> drive.stopWithX(), drive)));
 
       stick2
