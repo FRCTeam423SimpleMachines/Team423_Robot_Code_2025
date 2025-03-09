@@ -426,7 +426,8 @@ public class RobotContainer {
           .onTrue(
               new SequentialCommandGroup(
                   AutoBuilder.pathfindThenFollowPath(
-                      PathPlannerPath.fromPathFile("J"), kDefaultConstraints)));
+                      PathPlannerPath.fromPathFile("J"), kDefaultConstraints),
+                  new RunCommand(() -> drive.stopWithX(), drive)));
     } catch (FileVersionException | IOException | ParseException e) {
       // TODO Auto-generated catch block
       e.printStackTrace();
