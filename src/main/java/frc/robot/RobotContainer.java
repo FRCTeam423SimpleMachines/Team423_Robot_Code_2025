@@ -380,35 +380,44 @@ public class RobotContainer {
 
     // controller2.button(kAButton).whileTrue(new RunCommand(() -> lift.run(-0.3), lift));
 
+    try {
     // // left held
     stick2
         .button(kDownButton)
         .and(stick2.button(kTrigger))
         .and(stick1.button(kTrigger))
         .onTrue(
-            AutoBuilder.pathfindToPoseFlipped(
-                new Branch("A").getBranchPose(), kDefaultConstraints));
+              new SequentialCommandGroup(
+                  AutoBuilder.pathfindThenFollowPath(
+                      PathPlannerPath.fromPathFile("A"), kDefaultConstraints),
+                  new RunCommand(() -> drive.stopWithX(), drive)));
     stick2
         .button(kLeftButton)
         .and(stick2.button(kTrigger))
         .and(stick1.button(kTrigger))
         .onTrue(
-            AutoBuilder.pathfindToPoseFlipped(
-                new Branch("K").getBranchPose(), kDefaultConstraints));
+              new SequentialCommandGroup(
+                  AutoBuilder.pathfindThenFollowPath(
+                      PathPlannerPath.fromPathFile("K"), kDefaultConstraints),
+                  new RunCommand(() -> drive.stopWithX(), drive)));
     stick2
         .button(kRightButton)
         .and(stick2.button(kTrigger))
         .and(stick1.button(kTrigger))
         .onTrue(
-            AutoBuilder.pathfindToPoseFlipped(
-                new Branch("C").getBranchPose(), kDefaultConstraints));
+              new SequentialCommandGroup(
+                  AutoBuilder.pathfindThenFollowPath(
+                      PathPlannerPath.fromPathFile("C"), kDefaultConstraints),
+                  new RunCommand(() -> drive.stopWithX(), drive)));
     stick1
         .button(kDownButton)
         .and(stick2.button(kTrigger))
         .and(stick1.button(kTrigger))
         .onTrue(
-            AutoBuilder.pathfindToPoseFlipped(
-                new Branch("H").getBranchPose(), kDefaultConstraints));
+              new SequentialCommandGroup(
+                  AutoBuilder.pathfindThenFollowPath(
+                      PathPlannerPath.fromPathFile("H"), kDefaultConstraints),
+                  new RunCommand(() -> drive.stopWithX(), drive)));
     // stick1
     //     .button(kLeftButton)
     //     .and(stick2.button(kTrigger))
@@ -418,7 +427,7 @@ public class RobotContainer {
     //         AutoBuilder.pathfindToPoseFlipped(
     //             new Branch("J").getBranchPose(), kDefaultConstraints)));
 
-    try {
+    
       stick1
           .button(kLeftButton)
           .and(stick2.button(kTrigger))
@@ -428,18 +437,17 @@ public class RobotContainer {
                   AutoBuilder.pathfindThenFollowPath(
                       PathPlannerPath.fromPathFile("J"), kDefaultConstraints),
                   new RunCommand(() -> drive.stopWithX(), drive)));
-    } catch (FileVersionException | IOException | ParseException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-    }
+    
 
     stick1
         .button(kRightButton)
         .and(stick2.button(kTrigger))
         .and(stick1.button(kTrigger))
         .onTrue(
-            AutoBuilder.pathfindToPoseFlipped(
-                new Branch("F").getBranchPose(), kDefaultConstraints));
+              new SequentialCommandGroup(
+                  AutoBuilder.pathfindThenFollowPath(
+                      PathPlannerPath.fromPathFile("F"), kDefaultConstraints),
+                  new RunCommand(() -> drive.stopWithX(), drive)));
 
     // // no left held
     stick2
@@ -447,59 +455,80 @@ public class RobotContainer {
         .and(stick2.button(kTrigger))
         .and(stick1.button(kTrigger).negate())
         .onTrue(
-            AutoBuilder.pathfindToPoseFlipped(
-                new Branch("B").getBranchPose(), kDefaultConstraints));
+              new SequentialCommandGroup(
+                  AutoBuilder.pathfindThenFollowPath(
+                      PathPlannerPath.fromPathFile("B"), kDefaultConstraints),
+                  new RunCommand(() -> drive.stopWithX(), drive)));
     stick2
         .button(kLeftButton)
         .and(stick2.button(kTrigger))
         .and(stick1.button(kTrigger).negate())
         .onTrue(
-            AutoBuilder.pathfindToPoseFlipped(
-                new Branch("L").getBranchPose(), kDefaultConstraints));
+              new SequentialCommandGroup(
+                  AutoBuilder.pathfindThenFollowPath(
+                      PathPlannerPath.fromPathFile("L"), kDefaultConstraints),
+                  new RunCommand(() -> drive.stopWithX(), drive)));
     stick2
         .button(kRightButton)
         .and(stick2.button(kTrigger))
         .and(stick1.button(kTrigger).negate())
         .onTrue(
-            AutoBuilder.pathfindToPoseFlipped(
-                new Branch("D").getBranchPose(), kDefaultConstraints));
+              new SequentialCommandGroup(
+                  AutoBuilder.pathfindThenFollowPath(
+                      PathPlannerPath.fromPathFile("D"), kDefaultConstraints),
+                  new RunCommand(() -> drive.stopWithX(), drive)));
     stick1
         .button(kDownButton)
         .and(stick2.button(kTrigger))
         .and(stick1.button(kTrigger).negate())
         .onTrue(
-            AutoBuilder.pathfindToPoseFlipped(
-                new Branch("G").getBranchPose(), kDefaultConstraints));
+              new SequentialCommandGroup(
+                  AutoBuilder.pathfindThenFollowPath(
+                      PathPlannerPath.fromPathFile("G"), kDefaultConstraints),
+                  new RunCommand(() -> drive.stopWithX(), drive)));
     stick1
         .button(kLeftButton)
         .and(stick2.button(kTrigger))
         .and(stick1.button(kTrigger).negate())
         .onTrue(
-            AutoBuilder.pathfindToPoseFlipped(
-                new Branch("I").getBranchPose(), kDefaultConstraints));
+              new SequentialCommandGroup(
+                  AutoBuilder.pathfindThenFollowPath(
+                      PathPlannerPath.fromPathFile("I"), kDefaultConstraints),
+                  new RunCommand(() -> drive.stopWithX(), drive)));
     stick1
         .button(kRightButton)
         .and(stick2.button(kTrigger))
         .and(stick1.button(kTrigger).negate())
         .onTrue(
-            AutoBuilder.pathfindToPoseFlipped(
-                new Branch("E").getBranchPose(), kDefaultConstraints));
+              new SequentialCommandGroup(
+                  AutoBuilder.pathfindThenFollowPath(
+                      PathPlannerPath.fromPathFile("E"), kDefaultConstraints),
+                  new RunCommand(() -> drive.stopWithX(), drive)));
 
     stick2
         .button(kMidButton)
         .and(stick2.button(kTrigger))
         .and(stick1.button(kTrigger))
         .onTrue(
-            AutoBuilder.pathfindToPoseFlipped(
-                new Branch("L").getStationPose(), kDefaultConstraints));
+              new SequentialCommandGroup(
+                  AutoBuilder.pathfindThenFollowPath(
+                      PathPlannerPath.fromPathFile("Left Station"), kDefaultConstraints),
+                  new RunCommand(() -> drive.stopWithX(), drive)));
 
     stick2
         .button(kMidButton)
         .and(stick2.button(kTrigger))
         .and(stick1.button(kTrigger).negate())
         .onTrue(
-            AutoBuilder.pathfindToPoseFlipped(
-                new Branch("D").getStationPose(), kDefaultConstraints));
+              new SequentialCommandGroup(
+                  AutoBuilder.pathfindThenFollowPath(
+                      PathPlannerPath.fromPathFile("Right Station"), kDefaultConstraints),
+                  new RunCommand(() -> drive.stopWithX(), drive)));
+
+            } catch (FileVersionException | IOException | ParseException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+              }
 
     /*Should be breakout button; does not work */
     stick1
