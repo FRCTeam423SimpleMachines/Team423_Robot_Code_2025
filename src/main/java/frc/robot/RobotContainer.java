@@ -351,11 +351,13 @@ public class RobotContainer {
 
     controller2
         .button(kAButton)
-        .onTrue(new ElevatorPivotCommand(elevator, pivot, 28.0, 30)); // Station
+        .onTrue(new ElevatorPivotCommand(elevator, pivot, 28.0, 26)); // Station
 
     controller2.button(kBButton).onTrue(new ElevatorPivotCommand(elevator, pivot, 53.0, 335)); // L3
-    
-    controller2.axisGreaterThan(kRightTrigger,0.75).onTrue(new ElevatorPivotCommand(elevator, pivot, 35.0, 335)); // L2
+
+    controller2
+        .axisGreaterThan(kRightTrigger, 0.75)
+        .onTrue(new ElevatorPivotCommand(elevator, pivot, 35.0, 335)); // L2
 
     controller2
         .button(kXButton)
