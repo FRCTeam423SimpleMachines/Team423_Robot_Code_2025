@@ -51,6 +51,10 @@ import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.intake.IntakeIO;
 import frc.robot.subsystems.intake.IntakeIOSim;
 import frc.robot.subsystems.intake.IntakeIOSpark;
+import frc.robot.subsystems.lift.Lift;
+import frc.robot.subsystems.lift.LiftIO;
+import frc.robot.subsystems.lift.LiftIOSim;
+import frc.robot.subsystems.lift.LiftIOSpark;
 import frc.robot.subsystems.lights.Lights;
 import frc.robot.subsystems.lights.LightsIO;
 import frc.robot.subsystems.lights.LightsIOReal;
@@ -79,7 +83,7 @@ public class RobotContainer {
   private final Vision vision;
   private final Elevator elevator;
   private final Intake intake;
-  // private final Lift lift;
+  private final Lift lift;
   private final Pivot pivot;
   private final Lights lights;
 
@@ -117,7 +121,7 @@ public class RobotContainer {
 
         elevator = new Elevator(new ElevatorIOSpark());
         intake = new Intake(new IntakeIOSpark());
-        // lift = new Lift(new LiftIOSpark());
+        lift = new Lift(new LiftIOSpark());
         pivot = new Pivot(new PivotIOSpark());
         lights = new Lights(new LightsIOReal());
 
@@ -146,7 +150,7 @@ public class RobotContainer {
 
         elevator = new Elevator(new ElevatorIOSim());
         intake = new Intake(new IntakeIOSim());
-        // lift = new Lift(new LiftIOSim());
+        lift = new Lift(new LiftIOSim());
         pivot = new Pivot(new PivotIOSim());
         lights = new Lights(new LightsIO() {});
 
@@ -171,7 +175,7 @@ public class RobotContainer {
 
         elevator = new Elevator(new ElevatorIO() {});
         intake = new Intake(new IntakeIO() {});
-        // lift = new Lift(new LiftIO() {});
+        lift = new Lift(new LiftIO() {});
         pivot = new Pivot(new PivotIO() {});
         lights = new Lights(new LightsIO() {});
         break;
@@ -263,13 +267,12 @@ public class RobotContainer {
 
     lights.setDefaultCommand(new RunCommand(() -> lights.setValue(kOff), lights));
 
-    intake.setDefaultCommand(
-        new RunCommand(() -> intake.setSpeed(controller2.getRawAxis(kRightTrigger)), intake));
+    intake.setDefaultCommand(new RunCommand(() -> intake.setSpeed(0.0), intake));
 
     pivot.setDefaultCommand(new RunCommand(() -> pivot.runPow(0.0), pivot));
 
-    // lift.setDefaultCommand(
-    //     new RunCommand(() -> lift.run(-controller2.getRawAxis(kLeftYAxis)), lift));
+    lift.setDefaultCommand(
+        new RunCommand(() -> lift.run(-controller2.getRawAxis(kLeftYAxis)), lift));
 
     // Lock to 0° when A button is held
     controller1
@@ -353,17 +356,17 @@ public class RobotContainer {
         .button(kAButton)
         .onTrue(new ElevatorPivotCommand(elevator, pivot, 28.0, 26)); // Station
 
-    controller2.button(kBButton).onTrue(new ElevatorPivotCommand(elevator, pivot, 53.0, 335)); // L3
+    controller2.button(kBButton).onTrue(new ElevatorPivotCommand(elevator, pivot, 53.0, 330)); // L3
 
     controller2
         .axisGreaterThan(kRightTrigger, 0.75)
-        .onTrue(new ElevatorPivotCommand(elevator, pivot, 35.0, 335)); // L2
+        .onTrue(new ElevatorPivotCommand(elevator, pivot, 37.0, 330)); // L2
 
     controller2
         .button(kXButton)
         .onTrue(new ElevatorPivotCommand(elevator, pivot, 28.0, 90.0)); // Reset
 
-    controller2.button(kYButton).onTrue(new ElevatorPivotCommand(elevator, pivot, 78.0, 335)); // L4
+    controller2.button(kYButton).onTrue(new ElevatorPivotCommand(elevator, pivot, 78.0, 330)); // L4
 
     controller2.povUp().whileTrue(new RunCommand(() -> pivot.runPow(0.3), intake));
 
