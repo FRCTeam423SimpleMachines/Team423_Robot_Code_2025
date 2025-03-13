@@ -9,7 +9,7 @@ public class ElevatorPivotAuto extends ParallelCommandGroup {
   public ElevatorPivotAuto(
       Elevator elevatorSubsytem, Pivot pivotSubsystem, double elavatorHeight, double pivotAngle) {
     super(
-        new RunElevatorPosAuto(elevatorSubsytem, elavatorHeight),
-        new PivotToPositionAuto(pivotSubsystem, pivotAngle));
+        new PivotToPositionAuto(pivotSubsystem, pivotAngle),
+        new RunElevatorPosAuto(elevatorSubsytem, elavatorHeight));
   }
 }

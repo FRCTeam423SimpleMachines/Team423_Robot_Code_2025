@@ -31,7 +31,7 @@ import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
-import frc.robot.commands.AutoScoring;
+import frc.robot.commands.AutoScoringFixed;
 import frc.robot.commands.DriveCommands;
 import frc.robot.commands.ElevatorPivotCommand;
 import frc.robot.commands.PivotToPositionAuto;
@@ -205,10 +205,7 @@ public class RobotContainer {
     // Set up auto routines
     autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
 
-    autoChooser.addOption(
-        "AutoScoring",
-        new AutoScoring(
-            drive, elevator, pivot, intake, stationChooser, branchChooser1, branchChooser2));
+    autoChooser.addOption("AutoScoring", new AutoScoringFixed(drive, elevator, pivot, intake));
 
     try {
       autoChooser.addOption(

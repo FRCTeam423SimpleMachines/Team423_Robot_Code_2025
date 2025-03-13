@@ -55,6 +55,7 @@ public class AutoScoring extends Command {
 
   @Override
   public void execute() {
+
     new SequentialCommandGroup(
             AutoBuilder.pathfindToPoseFlipped(firstBranch.getBranchPose(), kDefaultConstraints),
             new ElevatorPivotAuto(elevator, pivot, 48.0, 340.0),

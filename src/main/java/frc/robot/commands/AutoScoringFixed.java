@@ -3,13 +3,16 @@ package frc.robot.commands;
 import static frc.robot.subsystems.drive.DriveConstants.kDefaultConstraints;
 
 import com.pathplanner.lib.auto.AutoBuilder;
-import edu.wpi.first.wpilibj2.command.RunCommand;
+import com.pathplanner.lib.path.PathPlannerPath;
+import com.pathplanner.lib.util.FileVersionException;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.elevator.Elevator;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.pivot.Pivot;
 import frc.robot.util.Branch;
+import java.io.IOException;
+import org.json.simple.parser.ParseException;
 
 public class AutoScoringFixed extends SequentialCommandGroup {
 
@@ -32,15 +35,25 @@ public class AutoScoringFixed extends SequentialCommandGroup {
     pivot = pivotSubsystem;
     intake = intakeSubsystem;
     addRequirements(drive);
-    addCommands(
-        AutoBuilder.pathfindToPoseFlipped(firstBranch.getBranchPose(), kDefaultConstraints),
-        new ElevatorPivotAuto(elevator, pivot, 48.0, 340.0),
-        new RunCommand(() -> intake.setSpeed(1.0), intake),
-        new ElevatorPivotAuto(elevator, pivot, 31.0, 25.97),
-        AutoBuilder.pathfindToPoseFlipped(firstBranch.getStationPose(), kDefaultConstraints),
-        new RunIntakeIn(intake, -0.7),
-        AutoBuilder.pathfindToPoseFlipped(secondBranch.getBranchPose(), kDefaultConstraints),
-        new ElevatorPivotAuto(elevator, pivot, 48.0, 340.0),
-        new RunCommand(() -> intake.setSpeed(1.0), intake));
+
+    try {
+      addCommands(
+          AutoBuilder.pathfindThenFollowPath(
+              PathPlannerPath.fromPathFile("I"), kDefaultConstraints),
+          new PivotToPositionAuto(pivot, 330),
+          new RunElevatorPosAuto(elevator, 74.0),
+          // new ElevatorPivotAuto(elevator, pivot, 78.0, 330), // L4
+          new RunIntakeOut(intake, 1.0),
+          new ElevatorPivotAuto(elevator, pivot, 28.0, 26), // Station
+          AutoBuilder.pathfindThenFollowPath(
+              PathPlannerPath.fromPathFile("Left Station"), kDefaultConstraints),
+          new RunIntakeIn(intake, -0.7),
+          AutoBuilder.pathfindThenFollowPath(
+              PathPlannerPath.fromPathFile("J"), kDefaultConstraints),
+          new ElevatorPivotAuto(elevator, pivot, 78.0, 330), // L4
+          new RunIntakeOut(intake, 1.0));
+    } catch (FileVersionException | IOException | ParseException e) {
+      end(true);
+    }
   }
 }
