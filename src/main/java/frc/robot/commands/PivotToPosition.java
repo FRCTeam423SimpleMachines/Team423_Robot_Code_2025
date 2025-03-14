@@ -25,7 +25,7 @@ public class PivotToPosition extends Command {
 
   @Override
   public void execute() {
-    pivot.runPow(-pivotController.calculate(pivot.getPosition()));
+    pivot.runPow(pivotController.calculate(pivot.getPosition()));
   }
 
   @Override

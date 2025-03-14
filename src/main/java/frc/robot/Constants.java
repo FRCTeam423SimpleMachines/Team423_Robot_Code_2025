@@ -80,6 +80,8 @@ public final class Constants {
   public static class ElevatorConstants {
     public static final int kFirstStageCANID = 21;
     public static final int kSecondStageCANID = 22;
+    public static final int kFirstLaserCANID = 8;
+    public static final int kSecondLaserCANID = 9;
     public static final int kFirstPotChannel = 0;
     public static final int kSecondPotChanel = 1;
     public static final double firstPotOffset = -0.007;
