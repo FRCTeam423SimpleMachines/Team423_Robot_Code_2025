@@ -351,7 +351,7 @@ public class RobotContainer {
 
     controller2
         .button(kAButton)
-        .onTrue(new ElevatorPivotCommand(elevator, pivot, 28.0, 26)); // Station
+        .onTrue(new ElevatorPivotCommand(elevator, pivot, 19.0, 26)); // Station
 
     controller2.button(kBButton).onTrue(new ElevatorPivotCommand(elevator, pivot, 53.0, 330)); // L3
 
@@ -361,7 +361,7 @@ public class RobotContainer {
 
     controller2
         .button(kXButton)
-        .onTrue(new ElevatorPivotCommand(elevator, pivot, 28.0, 90.0)); // Reset
+        .onTrue(new ElevatorPivotCommand(elevator, pivot, 19.0, 90.0)); // Reset
 
     controller2.button(kYButton).onTrue(new ElevatorPivotCommand(elevator, pivot, 78.0, 330)); // L4
 
