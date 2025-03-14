@@ -82,17 +82,20 @@ public final class Constants {
     public static final int kSecondStageCANID = 22;
     public static final int kFirstLaserCANID = 8;
     public static final int kSecondLaserCANID = 9;
-    public static final int kFirstPotChannel = 0;
-    public static final int kSecondPotChanel = 1;
-    public static final double firstPotOffset = -0.007;
-    public static final double secondPotOffset = -1.282;
-    public static final double firstPotToInchesFactor = 26.375 / 0.801;
-    public static final double secondPotToInchesFactor = 24.875 / 0.78;
-    public static final double firstUpperBound = 25.9;
-    public static final double firstLowerBound = 0.52;
-    public static final double secondUpperBound = 23.6;
-    public static final double secondLowerBound = 0.1;
-    public static final double elevatorOffset = 28;
+    // public static final int kFirstPotChannel = 0;
+    // public static final int kSecondPotChanel = 1;
+    // public static final double firstPotOffset = -0.007;
+    // public static final double secondPotOffset = -1.282;
+    // public static final double firstPotToInchesFactor = 26.375 / 0.801;
+    // public static final double secondPotToInchesFactor = 24.875 / 0.78;
+    public static final double firstLaserOffset = 1.3;
+    public static final double secondLaserOffset = 7.5;
+    public static final double firstUpperBound = 25;
+    public static final double firstLowerBound = 0;
+    public static final double secondUpperBound = 24;
+    public static final double secondLowerBound = 0;
+    public static final double floorOffset = 5;
+    public static final double armOffset = 14;
     public static final TrapezoidProfile kFirstProfile =
         new TrapezoidProfile(new Constraints(0.0, 0.0));
   }

@@ -55,7 +55,7 @@ public class Elevator extends SubsystemBase {
   }
 
   public double getTotalPos() {
-    return (getFirstPos() + getSecondPos() + elevatorOffset);
+    return (getFirstPos() + getSecondPos() + floorOffset + armOffset);
   }
 
   public void test(double speed1, double speed2) {

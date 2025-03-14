@@ -268,8 +268,8 @@ public class RobotContainer {
 
     pivot.setDefaultCommand(new RunCommand(() -> pivot.runPow(0.0), pivot));
 
-    lift.setDefaultCommand(
-        new RunCommand(() -> lift.run(-controller2.getRawAxis(kLeftYAxis)), lift));
+    // lift.setDefaultCommand(
+    //     new RunCommand(() -> lift.run(-controller2.getRawAxis(kLeftYAxis)), lift));
 
     // Lock to 0° when A button is held
     controller1

@@ -27,8 +27,8 @@ public class ElevatorIOSpark implements ElevatorIO {
     m_secondStageMotor = new SparkMax(ElevatorConstants.kSecondStageCANID, MotorType.kBrushless);
     m_firstStageEncoder = m_firstStageMotor.getEncoder();
     m_secondStageEncoder = m_secondStageMotor.getEncoder();
-    m_firstLaser = new LaserCan(kFirstPotChannel);
-    m_secondLaser = new LaserCan(kFirstPotChannel);
+    m_firstLaser = new LaserCan(kFirstLaserCANID);
+    m_secondLaser = new LaserCan(kSecondLaserCANID);
     // m_firstStagePot =
     //     new AnalogPotentiometer(kFirstPotChannel, firstPotToInchesFactor, firstPotOffset);
     // m_secondStagePot =
@@ -47,12 +47,14 @@ public class ElevatorIOSpark implements ElevatorIO {
 
   @Override
   public double getFirstPosition() {
-    return Units.metersToInches(0.001 * m_firstLaser.getMeasurement().distance_mm);
+    return Units.metersToInches(0.001 * m_firstLaser.getMeasurement().distance_mm)
+        - firstLaserOffset;
   }
 
   @Override
   public double getSecondPosition() {
-    return Units.metersToInches(0.001 * m_secondLaser.getMeasurement().distance_mm);
+    return Units.metersToInches(0.001 * m_secondLaser.getMeasurement().distance_mm)
+        - secondLaserOffset;
   }
 
   @Override
