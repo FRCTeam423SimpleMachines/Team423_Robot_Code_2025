@@ -10,7 +10,7 @@ public class RunElevatorPos extends Command {
   private final double elevatorPos;
   // private final PIDController elevatorController = new PIDController(1, 0, 0);
   private final ProfiledPIDController elevatorController =
-      new ProfiledPIDController(0.15, 0.001, 0, new TrapezoidProfile.Constraints(30, 90));
+      new ProfiledPIDController(0.1, 0.0, 0, new TrapezoidProfile.Constraints(30, 60));
 
   public RunElevatorPos(Elevator elevator, double elevatorPos) {
     this.elevator = elevator;
@@ -20,6 +20,7 @@ public class RunElevatorPos extends Command {
 
   @Override
   public void initialize() {
+    elevatorController.setTolerance(0.25);
     elevatorController.reset(elevator.getTotalPos());
     // elevatorController.setGoal(elevatorPos);
     // elevatorController.setSetpoint(elevatorPos);
