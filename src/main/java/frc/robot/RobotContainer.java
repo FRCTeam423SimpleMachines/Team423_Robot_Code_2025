@@ -383,8 +383,9 @@ public class RobotContainer {
 
     // controller2.button(kAButton).whileTrue(new RunCommand(() -> lift.run(-0.3), lift));
 
+    // Assume right trigger held for button bindings (i.e. Trigger always means left trigger)
     try {
-      // // left held
+      // Front Center Left: Trigger and Right Stick Down
       stick2
           .button(kDownButton)
           .and(stick2.button(kTrigger))
@@ -394,6 +395,7 @@ public class RobotContainer {
                   AutoBuilder.pathfindThenFollowPath(
                       PathPlannerPath.fromPathFile("A"), kDefaultConstraints),
                   new RunCommand(() -> drive.stopWithX(), drive)));
+      // Front Left Left: Trigger and Right Stick Left
       stick2
           .button(kLeftButton)
           .and(stick2.button(kTrigger))
@@ -403,6 +405,7 @@ public class RobotContainer {
                   AutoBuilder.pathfindThenFollowPath(
                       PathPlannerPath.fromPathFile("K"), kDefaultConstraints),
                   new RunCommand(() -> drive.stopWithX(), drive)));
+      // Front Right Left: Trigger and Right Stick Right
       stick2
           .button(kRightButton)
           .and(stick2.button(kTrigger))
@@ -412,6 +415,7 @@ public class RobotContainer {
                   AutoBuilder.pathfindThenFollowPath(
                       PathPlannerPath.fromPathFile("C"), kDefaultConstraints),
                   new RunCommand(() -> drive.stopWithX(), drive)));
+      // Back Center Left: Trigger and Left Stick Down
       stick1
           .button(kDownButton)
           .and(stick2.button(kTrigger))
@@ -430,6 +434,7 @@ public class RobotContainer {
       //         AutoBuilder.pathfindToPoseFlipped(
       //             new Branch("J").getBranchPose(), kDefaultConstraints)));
 
+      // Back Left Left: Trigger and Left Stick Left
       stick1
           .button(kLeftButton)
           .and(stick2.button(kTrigger))
@@ -440,6 +445,7 @@ public class RobotContainer {
                       PathPlannerPath.fromPathFile("I"), kDefaultConstraints),
                   new RunCommand(() -> drive.stopWithX(), drive)));
 
+      // Back Right Left: Trigger and Left Stick Right
       stick1
           .button(kRightButton)
           .and(stick2.button(kTrigger))
@@ -450,7 +456,7 @@ public class RobotContainer {
                       PathPlannerPath.fromPathFile("E"), kDefaultConstraints),
                   new RunCommand(() -> drive.stopWithX(), drive)));
 
-      // // no left held
+      // Front Center Right: Right Stick Down
       stick2
           .button(kDownButton)
           .and(stick2.button(kTrigger))
@@ -460,6 +466,7 @@ public class RobotContainer {
                   AutoBuilder.pathfindThenFollowPath(
                       PathPlannerPath.fromPathFile("B"), kDefaultConstraints),
                   new RunCommand(() -> drive.stopWithX(), drive)));
+      // Front Left Right: Right Stick Left
       stick2
           .button(kLeftButton)
           .and(stick2.button(kTrigger))
@@ -469,6 +476,7 @@ public class RobotContainer {
                   AutoBuilder.pathfindThenFollowPath(
                       PathPlannerPath.fromPathFile("L"), kDefaultConstraints),
                   new RunCommand(() -> drive.stopWithX(), drive)));
+      // Front Right Right: Right Stick Right
       stick2
           .button(kRightButton)
           .and(stick2.button(kTrigger))
@@ -478,6 +486,7 @@ public class RobotContainer {
                   AutoBuilder.pathfindThenFollowPath(
                       PathPlannerPath.fromPathFile("D"), kDefaultConstraints),
                   new RunCommand(() -> drive.stopWithX(), drive)));
+      // Back Center Right: Left Stick Down
       stick1
           .button(kDownButton)
           .and(stick2.button(kTrigger))
@@ -487,6 +496,7 @@ public class RobotContainer {
                   AutoBuilder.pathfindThenFollowPath(
                       PathPlannerPath.fromPathFile("H"), kDefaultConstraints),
                   new RunCommand(() -> drive.stopWithX(), drive)));
+      // Back Left Right: Left Stick Left
       stick1
           .button(kLeftButton)
           .and(stick2.button(kTrigger))
@@ -496,6 +506,7 @@ public class RobotContainer {
                   AutoBuilder.pathfindThenFollowPath(
                       PathPlannerPath.fromPathFile("J"), kDefaultConstraints),
                   new RunCommand(() -> drive.stopWithX(), drive)));
+      // Back Right Right: Left Stick Right
       stick1
           .button(kRightButton)
           .and(stick2.button(kTrigger))
@@ -505,7 +516,7 @@ public class RobotContainer {
                   AutoBuilder.pathfindThenFollowPath(
                       PathPlannerPath.fromPathFile("F"), kDefaultConstraints),
                   new RunCommand(() -> drive.stopWithX(), drive)));
-
+      // Left Station
       stick2
           .button(kMidButton)
           .and(stick2.button(kTrigger))
@@ -515,7 +526,7 @@ public class RobotContainer {
                   AutoBuilder.pathfindThenFollowPath(
                       PathPlannerPath.fromPathFile("Left Station"), kDefaultConstraints),
                   new RunCommand(() -> drive.stopWithX(), drive)));
-
+      // Right Station
       stick2
           .button(kMidButton)
           .and(stick2.button(kTrigger))
