@@ -91,9 +91,9 @@ public final class Constants {
     public static final double firstLaserOffset = 1.3;
     public static final double secondLaserOffset = 7.5;
     public static final double firstUpperBound = 25;
-    public static final double firstLowerBound = 0;
+    public static final double firstLowerBound = 0.1;
     public static final double secondUpperBound = 24;
-    public static final double secondLowerBound = 0;
+    public static final double secondLowerBound = 0.1;
     public static final double floorOffset = 5;
     public static final double armOffset = 14;
     public static final TrapezoidProfile kFirstProfile =
