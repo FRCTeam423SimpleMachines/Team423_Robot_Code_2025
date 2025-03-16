@@ -7,6 +7,7 @@ public interface LiftIO {
   public static class LiftIOInputs {
     public double liftPower = 0.0;
     public double liftPosotion = 0.0;
+    public double liftTurns = 0.0;
     public String currentCommand = "None";
   }
 

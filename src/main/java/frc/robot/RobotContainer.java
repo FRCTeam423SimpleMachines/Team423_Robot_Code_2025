@@ -27,17 +27,20 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.commands.AutoScoringFixed;
+import frc.robot.commands.AutoScoringSingle;
 import frc.robot.commands.DriveCommands;
 import frc.robot.commands.ElevatorPivotCommand;
-import frc.robot.commands.PivotToPosition;
+import frc.robot.commands.LiftToPosition;
 import frc.robot.commands.PivotToPositionAuto;
 import frc.robot.commands.RunElevatorPosAuto;
 import frc.robot.commands.RunIntakeIn;
+import frc.robot.commands.RunIntakeOut;
 import frc.robot.subsystems.drive.Drive;
 import frc.robot.subsystems.drive.GyroIO;
 import frc.robot.subsystems.drive.GyroIONavX;
@@ -67,7 +70,6 @@ import frc.robot.subsystems.vision.Vision;
 import frc.robot.subsystems.vision.VisionIO;
 import frc.robot.subsystems.vision.VisionIOPhotonVision;
 import frc.robot.subsystems.vision.VisionIOPhotonVisionSim;
-import frc.robot.util.Branch;
 import java.io.IOException;
 import org.json.simple.parser.ParseException;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
@@ -96,9 +98,9 @@ public class RobotContainer {
 
   // Dashboard inputs
   private final LoggedDashboardChooser<Command> autoChooser;
-  private final LoggedDashboardChooser<String> stationChooser;
-  private final LoggedDashboardChooser<Branch> branchChooser1;
-  private final LoggedDashboardChooser<Branch> branchChooser2;
+  //   private final LoggedDashboardChooser<String> stationChooser;
+  //   private final LoggedDashboardChooser<Branch> branchChooser1;
+  //   private final LoggedDashboardChooser<Branch> branchChooser2;
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -182,44 +184,63 @@ public class RobotContainer {
         break;
     }
 
-    NamedCommands.registerCommand("ElevatorL4", new RunElevatorPosAuto(elevator, 77.0));
-    NamedCommands.registerCommand("PivotScore", new PivotToPositionAuto(pivot, 340));
-    NamedCommands.registerCommand("IntakeOut", new RunCommand(() -> intake.setSpeed(1.0), intake));
+    NamedCommands.registerCommand("ElevatorL4", new RunElevatorPosAuto(elevator, 72.0));
+    NamedCommands.registerCommand("PivotScore", new PivotToPositionAuto(pivot, 330));
+    NamedCommands.registerCommand("ElevatorStation", new RunElevatorPosAuto(elevator, 19.0));
+    NamedCommands.registerCommand("PivotIntake", new PivotToPositionAuto(pivot, 26));
+    NamedCommands.registerCommand("IntakeOut", new RunIntakeOut(intake, 1.0));
+    NamedCommands.registerCommand("IntakeIn", new RunIntakeIn(intake, -7.0));
 
-    stationChooser = new LoggedDashboardChooser<>("Station Preference");
+    // stationChooser = new LoggedDashboardChooser<>("Station Preference");
 
-    stationChooser.addDefaultOption("Left", "Left");
-    stationChooser.addOption("Right", "Right");
+    // stationChooser.addDefaultOption("Left", "Left");
+    // stationChooser.addOption("Right", "Right");
 
-    branchChooser1 = new LoggedDashboardChooser<>("1st Branch");
-    branchChooser2 = new LoggedDashboardChooser<>("2nd Branch");
+    // branchChooser1 = new LoggedDashboardChooser<>("1st Branch");
+    // branchChooser2 = new LoggedDashboardChooser<>("2nd Branch");
 
-    final String[] branches = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L"};
+    // final String[] branches = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L"};
 
-    branchChooser1.addDefaultOption("A", new Branch("A"));
-    branchChooser2.addDefaultOption("A", new Branch("A"));
-    for (int i = 1; i < 12; i++) {
-      branchChooser1.addOption(branches[i], new Branch(branches[i]));
-      branchChooser2.addOption(branches[i], new Branch(branches[i]));
-    }
+    // branchChooser1.addDefaultOption("A", new Branch("A"));
+    // branchChooser2.addDefaultOption("A", new Branch("A"));
+    // for (int i = 1; i < 12; i++) {
+    //   branchChooser1.addOption(branches[i], new Branch(branches[i]));
+    //   branchChooser2.addOption(branches[i], new Branch(branches[i]));
+    // }
 
     // Set up auto routines
 
-    autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
+    autoChooser = new LoggedDashboardChooser<>("Autos", AutoBuilder.buildAutoChooser());
 
-    autoChooser.addOption("AutoScoring", new AutoScoringFixed(drive, elevator, pivot, intake));
+    autoChooser.addOption(
+        "AutoScoring Left",
+        new AutoScoringFixed(drive, elevator, pivot, intake, "J", "L", "Left Station"));
+    autoChooser.addOption(
+        "AutoScoring Center (LS)",
+        new AutoScoringFixed(drive, elevator, pivot, intake, "H", "A", "Left Station"));
+    autoChooser.addOption(
+        "AutoScoring Center (RS)",
+        new AutoScoringFixed(drive, elevator, pivot, intake, "G", "B", "Right Station"));
+    autoChooser.addOption(
+        "AutoScoring Center (Single)", new AutoScoringSingle(drive, elevator, pivot, intake, "G"));
+    autoChooser.addOption(
+        "AutoScoring Right",
+        new AutoScoringFixed(drive, elevator, pivot, intake, "E", "C", "Right Station"));
 
-    autoChooser.addOption("Pivot Test", new PivotToPosition(pivot, 330));
+    autoChooser.addOption(
+        "Pivot Test",
+        new SequentialCommandGroup(
+            new PivotToPositionAuto(pivot, 330), new RunElevatorPosAuto(elevator, 72)));
 
-    try {
-      autoChooser.addOption(
-          "pathfinding test",
-          AutoBuilder.pathfindThenFollowPath(
-              PathPlannerPath.fromPathFile("Score G"), kDefaultConstraints));
-    } catch (FileVersionException | IOException | ParseException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-    }
+    // try {
+    //   autoChooser.addOption(
+    //       "pathfinding test",
+    //       AutoBuilder.pathfindThenFollowPath(
+    //           PathPlannerPath.fromPathFile("Score G"), kDefaultConstraints));
+    // } catch (FileVersionException | IOException | ParseException e) {
+    //   // TODO Auto-generated catch block
+    //   e.printStackTrace();
+    // }
 
     // Set up SysId routines
     autoChooser.addOption(
@@ -272,8 +293,7 @@ public class RobotContainer {
 
     pivot.setDefaultCommand(new RunCommand(() -> pivot.runPow(0.0), pivot));
 
-    // lift.setDefaultCommand(
-    //     new RunCommand(() -> lift.run(-controller2.getRawAxis(kLeftYAxis)), lift));
+    lift.setDefaultCommand(new RunCommand(() -> lift.run(0.0), lift));
 
     // Lock to 0° when A button is held
     controller1
@@ -284,6 +304,15 @@ public class RobotContainer {
                 () -> controller1.getRawAxis(kLeftYAxis),
                 () -> controller1.getRawAxis(kLeftXAxis),
                 () -> new Rotation2d()));
+
+    stick1
+        .button(kMidRightButton)
+        .whileTrue(
+            DriveCommands.joystickDriveRobotRelative(
+                drive,
+                () -> MathUtil.applyDeadband(stick1.getRawAxis(kYAxis), 0.06),
+                () -> MathUtil.applyDeadband(stick1.getRawAxis(kXAxis), 0.06),
+                () -> 0.0));
 
     // Switch to X pattern when X button is pressed
     stick1.button(kMidButton).onTrue(Commands.runOnce(drive::stopWithX, drive));
@@ -357,21 +386,31 @@ public class RobotContainer {
         .button(kAButton)
         .onTrue(new ElevatorPivotCommand(elevator, pivot, 19.0, 26)); // Station
 
-    controller2.button(kBButton).onTrue(new ElevatorPivotCommand(elevator, pivot, 53.0, 330)); // L3
+    controller2.button(kBButton).onTrue(new ElevatorPivotCommand(elevator, pivot, 43.0, 330)); // L3
 
     controller2
         .axisGreaterThan(kRightTrigger, 0.75)
-        .onTrue(new ElevatorPivotCommand(elevator, pivot, 37.0, 330)); // L2
+        .onTrue(new ElevatorPivotCommand(elevator, pivot, 27.0, 330)); // L2
 
     controller2
         .button(kXButton)
         .onTrue(new ElevatorPivotCommand(elevator, pivot, 19.0, 90.0)); // Reset
 
-    controller2.button(kYButton).onTrue(new ElevatorPivotCommand(elevator, pivot, 78.0, 330)); // L4
+    controller2.button(kYButton).onTrue(new ElevatorPivotCommand(elevator, pivot, 70.0, 330)); // L4
 
-    controller2.povUp().whileTrue(new RunCommand(() -> pivot.runPow(0.3), intake));
+    // controller2.povUp().whileTrue(new RunCommand(() -> lift.run(0.3), intake));
 
-    controller2.povDown().whileTrue(new RunCommand(() -> pivot.runPow(-0.3), intake));
+    // controller2.povDown().whileTrue(new RunCommand(() -> lift.run(-0.3), intake));
+
+    controller2
+        .povDown()
+        .onTrue(
+            new SequentialCommandGroup(
+                new RunElevatorPosAuto(elevator, 37.0),
+                new ParallelCommandGroup(
+                    new LiftToPosition(lift, 240),
+                    new ElevatorPivotCommand(elevator, pivot, 37.0, 330.0))));
+    controller2.povUp().onTrue(new LiftToPosition(lift, 50));
 
     // stick2
     //     .button(kFrontRightButton)

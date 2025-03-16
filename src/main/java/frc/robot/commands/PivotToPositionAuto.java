@@ -14,6 +14,7 @@ public class PivotToPositionAuto extends Command {
   public PivotToPositionAuto(Pivot pivot, double position) {
     this.pivot = pivot;
     this.position = position;
+    addRequirements(pivot);
   }
 
   @Override

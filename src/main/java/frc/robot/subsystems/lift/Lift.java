@@ -23,6 +23,10 @@ public class Lift extends SubsystemBase {
     Logger.processInputs("Lift", inputs);
   }
 
+  public double getPos() {
+    return inputs.liftTurns;
+  }
+
   public Command runPercent(double percent) {
     return runEnd(() -> io.setVoltage(percent * 12.0), () -> io.setVoltage(0));
   }
